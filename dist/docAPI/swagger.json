@@ -1,0 +1,109 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "projectBox.pro API",
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": [
+                "http://localhost:5000",
+                "https://thawing-beach-08639.herokuapp.com/"
+            ]
+        }
+    ],
+    "tags": [
+        {
+            "name": "Запросы авторизации API",
+            "description": "API-функции приложения"
+        }
+    ],
+    "paths": {
+        "/api/sign-up": {
+            "post": {
+                "summary": "Регистрация пользователя",
+                "tags": [
+                    "Запросы авторизации API"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "surname": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "В объекте body, должны быть все ниже перечисленные параметры",
+                "responses": {
+                    "204": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/authorization/{id}": {
+            "put": {
+                "summary": "авторизация пользователя",
+                "tags": [
+                    "Запросы авторизации API"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "description": "Параметр id для авторизации пользователя",
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/user/{id}": {
+            "delete": {
+                "summary": "удаление пользователя по id",
+                "tags": [
+                    "Запросы авторизации API"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "description": "Параметр id для удаления пользователя",
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    }
+}
