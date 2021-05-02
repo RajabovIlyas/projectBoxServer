@@ -7,9 +7,6 @@
   "servers": [
     {
       "url": "https://thawing-beach-08639.herokuapp.com/"
-    },
-    {
-      "url": "http://localhost:5000/"
     }
   ],
   "tags": [
