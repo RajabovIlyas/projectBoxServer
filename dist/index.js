@@ -26,19 +26,12 @@ const express_1 = __importDefault(require("express"));
 const app_1 = require("./core/app");
 const express_2 = __importDefault(require("./core/express"));
 const routes_1 = __importDefault(require("./core/routes"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerDocument = __importStar(require("./docAPI/swagger.json"));
 const app = express_1.default();
 express_2.default(app);
 routes_1.default(app);
 app.use('/api', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
-mongoose_1.default.connect(app_1.MONGO_URI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    app.listen(app_1.PORT, () => {
-        console.log(`Server started: http://localhost:${app_1.PORT}`);
-    });
-}).catch((err) => console.log('Упал монго', err));
+app.listen(app_1.PORT, () => {
+    console.log(`Server started: http://localhost:${app_1.PORT}`);
+});

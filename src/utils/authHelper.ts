@@ -1,69 +1,43 @@
 import {v4 as uuid} from 'uuid';
-const jwt = require('jsonwebtoken');
-import Token, {IToken} from '../models/Token';
+import jwt from 'jsonwebtoken';
 import {secret, tokens} from '../core/app';
+import {connect} from '../database';
 
-export const generateAccessToken = (userId:string) => {
-  const payload = {
-    userId,
-    type: tokens.access.type,
-  };
 
-  const options = {expiresIn: tokens.access.expiresIn};
-  return jwt.sign(payload, secret, options);
-};
-
-export const generateRefreshToken = () => {
+export const generateAccessToken = () => {
   const payload = {
     id: uuid(),
-    type: tokens.refresh.type,
+    type: tokens.access.type,
   };
-  const options = {expiresIn: tokens.refresh.expiresIn};
   return {
     id: payload.id,
-    token: jwt.sign(payload, secret, options),
+    token: jwt.sign(payload, secret),
   };
 };
 
-export const replaceDbRefreshToken = (tokenId:string, userId:string) => {
-  Token.findOneAndDelete({userId})
-      .exec()
-      .then(() => {
-        Token.create({tokenId, userId});
-      })
-      .catch(() => {
-        Token.create({tokenId, userId});
+export const replaceDbToken = (tokenId:string, userId:string) => {
+  connect()
+      .then((conn)=>{
+        conn.query(`INSERT INTO token  (userId,tokenId) VALUES ('${userId}','${tokenId}')`);
+      });
+};
+
+export const generateToken = async (userId: string) => {
+  const tokenAll=generateAccessToken();
+  await replaceDbToken(tokenAll.id, userId);
+  return tokenAll.token;
+};
+
+export const findToken = async (tokenId:string) => {
+  return connect()
+      .then((conn)=>{
+        return conn.query(`SELECT * FROM token WHERE tokenId='${tokenId}'`);
       });
 };
 
 export const removeToken = async (tokenId:string) => {
-  return await Token.findOneAndDelete({tokenId}).exec()
-      .then((response) => {
-        return true;
-      })
-      .catch((e) => {
-        return false;
+  return connect()
+      .then((conn)=>{
+        return conn.query(`DELETE FROM token WHERE  tokenId='${tokenId}'`);
       });
 };
-
-export const updateTokens = async (userId:string) => {
-  const accessToken =await generateAccessToken(userId);
-  const refreshToken =await generateRefreshToken();
-  await replaceDbRefreshToken(refreshToken.id, userId);
-  return {
-    accessToken,
-    refreshToken: refreshToken.token,
-  };
-};
-
-export const findToken = (payload: {userId:string, tokenId:string}) => {
-  return Token.findOne(payload)
-      .then((result) => {
-        return true;
-      })
-      .catch((e) => {
-        return false;
-      });
-};
-
-

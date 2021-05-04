@@ -21,3 +21,8 @@ export const tokens={
     expiresIn: process.env.TOKEN_REFRESH_EXPIRESS_IN ? process.env.TOKEN_REFRESH_EXPIRESS_IN : '50m',
   },
 };
+
+export const sendMessageData={
+  login: process.env.EMAIL_LOGIN ? process.env.EMAIL_LOGIN : '',
+  password: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD : '',
+};

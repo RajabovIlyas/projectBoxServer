@@ -12,70 +12,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findToken = exports.updateTokens = exports.removeToken = exports.replaceDbRefreshToken = exports.generateRefreshToken = exports.generateAccessToken = void 0;
+exports.removeToken = exports.findToken = exports.generateToken = exports.replaceDbToken = exports.generateAccessToken = void 0;
 const uuid_1 = require("uuid");
-const jwt = require('jsonwebtoken');
-const Token_1 = __importDefault(require("../models/Token"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const app_1 = require("../core/app");
-const generateAccessToken = (userId) => {
-    const payload = {
-        userId,
-        type: app_1.tokens.access.type,
-    };
-    const options = { expiresIn: app_1.tokens.access.expiresIn };
-    return jwt.sign(payload, app_1.secret, options);
-};
-exports.generateAccessToken = generateAccessToken;
-const generateRefreshToken = () => {
+const database_1 = require("../database");
+const generateAccessToken = () => {
     const payload = {
         id: uuid_1.v4(),
-        type: app_1.tokens.refresh.type,
+        type: app_1.tokens.access.type,
     };
-    const options = { expiresIn: app_1.tokens.refresh.expiresIn };
     return {
         id: payload.id,
-        token: jwt.sign(payload, app_1.secret, options),
+        token: jsonwebtoken_1.default.sign(payload, app_1.secret),
     };
 };
-exports.generateRefreshToken = generateRefreshToken;
-const replaceDbRefreshToken = (tokenId, userId) => {
-    Token_1.default.findOneAndDelete({ userId })
-        .exec()
-        .then(() => {
-        Token_1.default.create({ tokenId, userId });
-    })
-        .catch(() => {
-        Token_1.default.create({ tokenId, userId });
+exports.generateAccessToken = generateAccessToken;
+const replaceDbToken = (tokenId, userId) => {
+    database_1.connect()
+        .then((conn) => {
+        conn.query(`INSERT INTO token  (userId,tokenId) VALUES ('${userId}','${tokenId}')`);
     });
 };
-exports.replaceDbRefreshToken = replaceDbRefreshToken;
+exports.replaceDbToken = replaceDbToken;
+const generateToken = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const tokenAll = exports.generateAccessToken();
+    yield exports.replaceDbToken(tokenAll.id, userId);
+    return tokenAll.token;
+});
+exports.generateToken = generateToken;
+const findToken = (tokenId) => __awaiter(void 0, void 0, void 0, function* () {
+    return database_1.connect()
+        .then((conn) => {
+        return conn.query(`SELECT * FROM token WHERE tokenId='${tokenId}'`);
+    });
+});
+exports.findToken = findToken;
 const removeToken = (tokenId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Token_1.default.findOneAndDelete({ tokenId }).exec()
-        .then((response) => {
-        return true;
-    })
-        .catch((e) => {
-        return false;
+    return database_1.connect()
+        .then((conn) => {
+        return conn.query(`DELETE FROM token WHERE  tokenId='${tokenId}'`);
     });
 });
 exports.removeToken = removeToken;
-const updateTokens = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const accessToken = yield exports.generateAccessToken(userId);
-    const refreshToken = yield exports.generateRefreshToken();
-    yield exports.replaceDbRefreshToken(refreshToken.id, userId);
-    return {
-        accessToken,
-        refreshToken: refreshToken.token,
-    };
-});
-exports.updateTokens = updateTokens;
-const findToken = (payload) => {
-    return Token_1.default.findOne(payload)
-        .then((result) => {
-        return true;
-    })
-        .catch((e) => {
-        return false;
-    });
-};
-exports.findToken = findToken;

@@ -8,17 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDataSignUp = void 0;
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const uuid_1 = require("uuid");
-const getDataSignUp = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.body.password) {
-        return undefined;
-    }
-    return { id: uuid_1.v4(), name: req.body.name, surname: req.body.surname, email: req.body.email, password: bcryptjs_1.default.hashSync(req.body.password) };
+exports.connect = void 0;
+const promise_1 = require("mysql2/promise");
+const connect = () => __awaiter(void 0, void 0, void 0, function* () {
+    return promise_1.createPool({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'project_box_pro',
+    });
 });
-exports.getDataSignUp = getDataSignUp;
+exports.connect = connect;

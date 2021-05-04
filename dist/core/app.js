@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tokens = exports.secret = exports.MONGO_URI = exports.PORT = void 0;
+exports.sendMessageData = exports.tokens = exports.secret = exports.MONGO_URI = exports.PORT = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.PORT = process.env.PORT ? Number(process.env.PORT) : 5000;
@@ -19,4 +19,8 @@ exports.tokens = {
         type: process.env.TOKEN_REFRESH_TYPE ? process.env.TOKEN_REFRESH_TYPE : 'refresh',
         expiresIn: process.env.TOKEN_REFRESH_EXPIRESS_IN ? process.env.TOKEN_REFRESH_EXPIRESS_IN : '50m',
     },
+};
+exports.sendMessageData = {
+    login: process.env.EMAIL_LOGIN ? process.env.EMAIL_LOGIN : '',
+    password: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD : '',
 };

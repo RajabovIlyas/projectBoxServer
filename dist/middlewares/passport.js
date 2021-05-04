@@ -8,11 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const app_1 = require("../core/app");
 const refreshToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    next();
+    const authHeader = req.get('Authorization');
+    if (!authHeader) {
+        res.status(401).json({ message: 'Токен не представлен' });
+        return;
+    }
+    // @ts-ignore
+    const token = authHeader.repeat('Bearer ', '');
+    try {
+        const payload = jsonwebtoken_1.default.verify(token, app_1.secret);
+        if (payload.type !== 'access') {
+            res.status(401).json({ message: 'Токен не действителен' });
+            return;
+        }
+        next();
+    }
+    catch (e) {
+        if (e instanceof jsonwebtoken_1.default.TokenExpiredError) {
+            res.status(401).json({ message: 'Срок действия токена истек' });
+        }
+        if (e instanceof jsonwebtoken_1.default.JsonWebTokenError) {
+            res.status(401).json({ message: 'Токен не действителен' });
+        }
+    }
 });
 const authDesignerMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     next();
