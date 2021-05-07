@@ -8,87 +8,108 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const authType_1 = require("./authType");
 const bcryptjs_1 = require("bcryptjs");
 const authHelper_1 = require("../../utils/authHelper");
-const database_1 = require("../../database");
 const sendMessage_1 = require("../../utils/sendMessage");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const app_1 = require("../../core/app");
+const User_1 = __importDefault(require("../../models/User"));
+const Token_1 = __importDefault(require("../../models/Token"));
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield authType_1.getDataSignUp(req);
-    database_1.connect()
-        .then((conn) => {
-        if (result) {
-            conn.query(`INSERT INTO user (id,name,surname,email,password) VALUES ('${result.id}', '${result.name}'
-                ,'${result.surname}','${result.email}','${result.password}')`)
-                .then((dataStatus) => __awaiter(void 0, void 0, void 0, function* () {
-                sendMessage_1.sendMessage(result)
-                    .then((result) => {
-                    res.status(200).json({ message: 'Сылка для авторизации отправлено на почту' });
-                })
-                    .catch(() => res.status(500).json({ message: 'Отправка рассылки не получилась!' }));
-            }))
-                .catch((err) => {
-                res.status(405).json({ message: 'Такой email уже существует!' });
-            });
+    User_1.default.create(result)
+        .then((result) => {
+        sendMessage_1.sendMessage(result)
+            .then((result) => {
+            res.status(200).json({ message: 'Сылка для авторизации отправлено на почту' });
+        })
+            .catch(() => res.status(500).json({ message: 'Отправка рассылки не получилась!' }));
+    })
+        .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
+});
+const authorization = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    User_1.default.findByIdAndUpdate(req.params.id, { authorization: true }).exec()
+        .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+        const token = yield authHelper_1.generateToken(req.params.id);
+        res.status(200).json({ token: token });
+    }))
+        .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
+});
+const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    //
+    // connect()
+    //     .then((conn) => {
+    //       conn.query(`SELECT * FROM user WHERE email='${email}' AND authorization=true`)
+    //           .then(async (result) => {
+    //             // @ts-ignore
+    //             if (result[0][0] && compareSync(password, result[0][0].password)) {
+    //               // @ts-ignore
+    //               const token = await generateToken(result[0][0].id);
+    //               res.status(200).json({token: token});
+    //             } else {
+    //               throw 404;
+    //             }
+    //           })
+    //           .catch((err) =>
+    //             res.status(404).json({message: 'Не верно введены данные!'}),
+    //           );
+    //     })
+    //     .catch((err) => res.status(500).json({message: 'Ошибка подключении к серверу'}));
+    User_1.default.findOne({ email, authorization: true }).exec()
+        .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+        if ((result === null || result === void 0 ? void 0 : result.id) && bcryptjs_1.compareSync(password, result.password)) {
+            const token = yield authHelper_1.generateToken(result.id);
+            res.status(200).json({ token: token });
+        }
+        else {
+            throw 404;
+        }
+    }))
+        .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
+});
+const authMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const authHeader = req.get('Authorization');
+    const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.substr(7);
+    if (!token) {
+        res.status(401).json({ message: 'Токен не представлен' });
+        return;
+    }
+    const payload = jsonwebtoken_1.default.verify(token, app_1.secret);
+    Token_1.default.findOne({ tokenId: payload.id }).populate({ path: 'user' }).exec()
+        .then((token) => {
+        if (token) {
+            res.status(200).json(token.userId);
         }
         else {
             throw 404;
         }
     })
-        .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
+        .catch((err) => res.status(404).json('Токен не действителен'));
 });
-const authorization = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    database_1.connect()
-        .then((conn) => {
-        conn.query(`UPDATE user SET authorization = true WHERE id = '${req.params.id}'`)
-            .then((dataStatus) => __awaiter(void 0, void 0, void 0, function* () {
-            var _a;
-            // @ts-ignore
-            if (((_a = dataStatus[0]) === null || _a === void 0 ? void 0 : _a.affectedRows) === 0) {
-                throw 404;
-            }
-            const token = yield authHelper_1.generateToken(req.params.id);
-            res.status(200).json({ token: token });
-        }))
-            .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
-    }).catch((err) => res.status(500).json({ message: 'Ошибка подключении к серверу' }));
-});
-const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    database_1.connect()
-        .then((conn) => {
-        conn.query(`SELECT * FROM user WHERE email='${email}' AND authorization=true`)
-            .then((result) => __awaiter(void 0, void 0, void 0, function* () {
-            // @ts-ignore
-            if (result[0][0] && bcryptjs_1.compareSync(password, result[0][0].password)) {
-                // @ts-ignore
-                const token = yield authHelper_1.generateToken(result[0][0].id);
-                res.status(200).json({ token: token });
-            }
-            else {
-                throw 404;
-            }
-        }))
-            .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const authHeader = req.get('Authorization');
+    const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.substr(7);
+    if (!token) {
+        res.status(401).json({ message: 'Токен не представлен' });
+        return;
+    }
+    const payload = jsonwebtoken_1.default.verify(token, app_1.secret);
+    Token_1.default.findOneAndDelete({ tokenId: payload.id }).exec()
+        .then((token) => {
+        res.status(200).json({ message: 'Токен успешно удален' });
     })
-        .catch((err) => res.status(500).json({ message: 'Ошибка подключении к серверу' }));
-    // User.findOne({email, activate: true}).exec()
-    //     .then(async (result) => {
-    //       if (result && compareSync(password, result.password)) {
-    //         const token = await generateToken(result.id);
-    //         res.status(200).json({token: token});
-    //       } else {
-    //         throw 404;
-    //       }
-    //     })
-    //     .catch((err) => res.status(404).json({message: 'Не верно введены данные!'}));
-});
-const authMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        .catch((err) => res.status(404).json('Токен не действителен'));
 });
 exports.default = {
     signUp,
     logIn,
     authorization,
     authMe,
+    logout,
 };

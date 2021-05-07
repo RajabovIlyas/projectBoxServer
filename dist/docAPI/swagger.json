@@ -4,9 +4,34 @@
         "title": "projectBox.pro API",
         "version": "v1"
     },
+    "components": {
+        "securitySchemes": {
+            "oAuthGoogle": {
+                "type": "oauth2",
+                "description": "This API uses OAuth 2 with the implicit grant flow. [More info](https://api.example.com/docs/auth)",
+                "flows": {
+                    "implicit": {
+                        "authorizationUrl": "http://localhost:5000/api/auth/google/callback",
+                        "scopes": {
+                            "read_pets": "",
+                            "write_pets": "modify pets in your account"
+                        }
+                    }
+                }
+            },
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
     "servers": [
         {
             "url": "https://thawing-beach-08639.herokuapp.com/"
+        },
+        {
+            "url": "http://178.172.137.52:5000/"
         },
         {
             "url": "http://localhost:5000/"
@@ -81,25 +106,89 @@
                 }
             }
         },
-        "/api/user/{id}": {
-            "delete": {
-                "summary": "удаление пользователя по id",
+        "/api/log-in": {
+            "post": {
+                "summary": "Вход в личный кабинет",
                 "tags": [
                     "Запросы авторизации API"
                 ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
                         }
                     }
-                ],
-                "description": "Параметр id для удаления пользователя",
+                },
+                "description": "В объекте body, должны быть все ниже перечисленные параметры",
                 "responses": {
-                    "201": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/google": {
+            "get": {
+                "summary": "Авторизация и регистрация через GOOGLE",
+                "tags": [
+                    "Запросы авторизации API"
+                ],
+                "description": "При успешном входе должен вернуть объект token",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth-me": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": [
+                            "JWT"
+                        ]
+                    }
+                ],
+                "summary": "Получение личных данных через Token",
+                "tags": [
+                    "Запросы авторизации API"
+                ],
+                "description": "Чтобы получить личные данные необходимо вписать свой Token",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": [
+                            "JWT"
+                        ]
+                    }
+                ],
+                "summary": "Удаление Token-а через Authorization",
+                "tags": [
+                    "Запросы авторизации API"
+                ],
+                "description": "Чтобы удалить токен нужно вписать свой Token",
+                "responses": {
+                    "200": {
                         "description": "OK"
                     }
                 }

@@ -1,0 +1,101 @@
+import passport from 'passport';
+import passportGoogle from 'passport-google-oauth20';
+import {ISignUp} from '../controllers/AuthController/authType';
+import {v4 as uuid} from 'uuid';
+import {generateToken} from '../utils/authHelper';
+import {googleClient} from '../core/app';
+import User from '../models/User';
+
+passport.serializeUser((user, done)=> {
+  /*
+    От пользователя возьмите только идентификатор (чтобы минимизировать размер файла cookie)
+    и просто передайте идентификатор пользователя
+    к выполненному обратному вызову
+    PS: Вам не нужно делать это так, обычно это делается так
+    */
+  done(null, user);
+});
+
+passport.deserializeUser((user:any, done)=> {
+  /*
+    Вместо пользователя эта функция обычно получает идентификатор
+    затем вы используете идентификатор, чтобы выбрать пользователя из базы данных и
+    передать объект пользователя в обратный вызов done
+    PS: Позже вы можете получить доступ к этим данным по любым маршрутам в: req.user
+    */
+  done(null, user);
+});
+
+passport.use(new passportGoogle.Strategy({
+  clientID: googleClient.id,
+  clientSecret: googleClient.secret,
+  callbackURL: 'http://localhost:5000/api/auth/google/callback',
+},
+(token, tokenSecret, profile, done)=> {
+  // @ts-ignore
+  const email=profile.emails[0].value;
+  const signUpData:ISignUp={
+    surname: profile.name?.familyName,
+    name: profile.name?.givenName,
+    email: email,
+    password: uuid(),
+  };
+  User.findOne({email: signUpData.email}).exec()
+      .then(async (result)=>{
+        if (result?.id) {
+          done(null, {token: await generateToken(result.id)});
+        } else {
+          User.create({...signUpData, authorization: true})
+              .then(async (result)=>{
+                if (result?.id) {
+                  done(null, {token: await generateToken(result.id)});
+                } else {
+                  throw 500;
+                }
+              }).catch((err)=> done(err, profile));
+        }
+      })
+      .catch((err)=> done(err, profile));
+
+
+  // connect()
+  //     .then((conn) => {
+  //       if (!profile.emails?.values) {
+  //         throw 404;
+  //       }
+  //       conn.query(`SELECT id FROM user WHERE email='${profile?.emails[0]?.value}'`)
+  //           .then(async (result)=>{
+  //             // @ts-ignore
+  //             if (result[0][0]) {
+  //               // @ts-ignore
+  //               done(null, {token: await generateToken(result[0][0].id)});
+  //             } else {
+  //               if (!profile.emails?.values) {
+  //                 throw 404;
+  //               }
+  //               const signUpData:ISignUp={
+  //                 surname: profile.name?.familyName,
+  //                 name: profile.name?.givenName,
+  //                 email: profile.emails[0].value,
+  //                 id: uuid(),
+  //                 password: uuid(),
+  //               };
+  //               conn.query(`INSERT INTO user (id,name,surname,email,password,authorization) VALUES ('${signUpData.id}', '${signUpData.name}'
+  //                     ,'${signUpData.surname}','${signUpData.email}','${signUpData.password}',true)`)
+  //                   .then(async (dataStatus) => {
+  //                     done(null, {token: await generateToken(signUpData.id)});
+  //                   })
+  //                   .catch((err) => done(err, undefined));
+  //             }
+  //             return;
+  //           })
+  //           .catch((err)=>{
+  //             done(err, undefined);
+  //           });
+  //     }).catch((err)=>{
+  //       done(err, undefined);
+  //     });
+
+  // done(null, profile);
+},
+));

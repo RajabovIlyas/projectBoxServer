@@ -1,7 +1,7 @@
 import {v4 as uuid} from 'uuid';
 import jwt from 'jsonwebtoken';
 import {secret, tokens} from '../core/app';
-import {connect} from '../database';
+import Token from '../models/Token';
 
 
 export const generateAccessToken = () => {
@@ -16,10 +16,7 @@ export const generateAccessToken = () => {
 };
 
 export const replaceDbToken = (tokenId:string, userId:string) => {
-  connect()
-      .then((conn)=>{
-        conn.query(`INSERT INTO token  (userId,tokenId) VALUES ('${userId}','${tokenId}')`);
-      });
+  Token.create({tokenId: tokenId, userId: userId});
 };
 
 export const generateToken = async (userId: string) => {
@@ -29,15 +26,9 @@ export const generateToken = async (userId: string) => {
 };
 
 export const findToken = async (tokenId:string) => {
-  return connect()
-      .then((conn)=>{
-        return conn.query(`SELECT * FROM token WHERE tokenId='${tokenId}'`);
-      });
+  return Token.findOne({tokenId: tokenId});
 };
 
 export const removeToken = async (tokenId:string) => {
-  return connect()
-      .then((conn)=>{
-        return conn.query(`DELETE FROM token WHERE  tokenId='${tokenId}'`);
-      });
+  return Token.findOneAndDelete({tokenId: tokenId});
 };

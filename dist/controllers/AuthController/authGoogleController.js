@@ -9,8 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDataSignUp = void 0;
-const getDataSignUp = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    return { name: req.body.name, surname: req.body.surname, email: req.body.email, password: req.body.password };
+const auth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('authGoogleGet', req.user);
+    // @ts-ignore
+    if (req === null || req === void 0 ? void 0 : req.user.token) {
+        res.status(200).json(req.user);
+    }
+    else {
+        res.status(500).json({ message: 'Ошибка сервера' });
+    }
 });
-exports.getDataSignUp = getDataSignUp;
+exports.default = { auth };

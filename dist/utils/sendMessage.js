@@ -21,7 +21,7 @@ const htmlMessageAuthorization = (user) => {
         `<p>Здравствуйте, ${user.name + ' ' + user.surname}<br/>` +
         'Благодарим Вас за регистрацию на сайте ProjectBox.pro<br/>' +
         'Чтобы завершить регистрацию, перейдите по ссылке:<br/>' +
-        `http://localhost:3000/auth/check_key/${user.id}</p></div>`);
+        `${app_1.sendMessageData.urlProjectBox}/auth/check_key/${user._id}</p></div>`);
 };
 const sendMessage = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = yield nodemailer_1.default.createTransport({

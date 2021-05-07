@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const app_1 = require("../core/app");
+const Token_1 = __importDefault(require("../models/Token"));
 const refreshToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,21 +23,32 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         res.status(401).json({ message: 'Токен не представлен' });
         return;
     }
-    // @ts-ignore
-    const token = authHeader.repeat('Bearer ', '');
+    const token = authHeader.substr(7);
     try {
         const payload = jsonwebtoken_1.default.verify(token, app_1.secret);
         if (payload.type !== 'access') {
             res.status(401).json({ message: 'Токен не действителен' });
             return;
         }
-        next();
+        Token_1.default.findOne({ tokenId: payload.id }).exec()
+            .then((result) => {
+            if (result) {
+                next();
+            }
+            else {
+                throw 404;
+            }
+        })
+            .catch((err) => res.status(401).json({ message: 'Токен не действителен' }));
     }
     catch (e) {
         if (e instanceof jsonwebtoken_1.default.TokenExpiredError) {
             res.status(401).json({ message: 'Срок действия токена истек' });
         }
         if (e instanceof jsonwebtoken_1.default.JsonWebTokenError) {
+            res.status(401).json({ message: 'Токен не действителен' });
+        }
+        else {
             res.status(401).json({ message: 'Токен не действителен' });
         }
     }

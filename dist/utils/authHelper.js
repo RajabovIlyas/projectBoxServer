@@ -16,7 +16,7 @@ exports.removeToken = exports.findToken = exports.generateToken = exports.replac
 const uuid_1 = require("uuid");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const app_1 = require("../core/app");
-const database_1 = require("../database");
+const Token_1 = __importDefault(require("../models/Token"));
 const generateAccessToken = () => {
     const payload = {
         id: uuid_1.v4(),
@@ -29,10 +29,7 @@ const generateAccessToken = () => {
 };
 exports.generateAccessToken = generateAccessToken;
 const replaceDbToken = (tokenId, userId) => {
-    database_1.connect()
-        .then((conn) => {
-        conn.query(`INSERT INTO token  (userId,tokenId) VALUES ('${userId}','${tokenId}')`);
-    });
+    Token_1.default.create({ tokenId: tokenId, userId: userId });
 };
 exports.replaceDbToken = replaceDbToken;
 const generateToken = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -42,16 +39,10 @@ const generateToken = (userId) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.generateToken = generateToken;
 const findToken = (tokenId) => __awaiter(void 0, void 0, void 0, function* () {
-    return database_1.connect()
-        .then((conn) => {
-        return conn.query(`SELECT * FROM token WHERE tokenId='${tokenId}'`);
-    });
+    return Token_1.default.findOne({ tokenId: tokenId });
 });
 exports.findToken = findToken;
 const removeToken = (tokenId) => __awaiter(void 0, void 0, void 0, function* () {
-    return database_1.connect()
-        .then((conn) => {
-        return conn.query(`DELETE FROM token WHERE  tokenId='${tokenId}'`);
-    });
+    return Token_1.default.findOneAndDelete({ tokenId: tokenId });
 });
 exports.removeToken = removeToken;

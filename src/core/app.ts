@@ -25,4 +25,10 @@ export const tokens={
 export const sendMessageData={
   login: process.env.EMAIL_LOGIN ? process.env.EMAIL_LOGIN : '',
   password: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD : '',
+  urlProjectBox: process.env.URL_PROJECT_BOX ? process.env.URL_PROJECT_BOX : '',
+};
+
+export const googleClient={
+  id: process.env.CLIENT_ID_GOOGLE ? process.env.CLIENT_ID_GOOGLE : '',
+  secret: process.env.CLIENT_SECRET_GOOGLE ? process.env.CLIENT_SECRET_GOOGLE : '',
 };
