@@ -105,5 +105,4 @@ passport_1.default.use(new passport_google_oauth20_1.default.Strategy({
     //     }).catch((err)=>{
     //       done(err, undefined);
     //     });
-    // done(null, profile);
 }));

@@ -95,7 +95,5 @@ passport.use(new passportGoogle.Strategy({
   //     }).catch((err)=>{
   //       done(err, undefined);
   //     });
-
-  // done(null, profile);
 },
 ));
