@@ -12,13 +12,11 @@ const createRoutes = (app: Router) => {
   });
 
   app.get('/api/auth/google/callback', (req:Request, res:Response, next:NextFunction)=>{
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
+
     next();
   }, passport.authenticate('google', {failureRedirect: '/failed'}), authGoogle.auth);
   app.get('/api/auth/google', (req:Request, res:Response, next:NextFunction)=>{
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
+
     next();
   }, passport.authenticate('google', {scope: ['profile', 'email']}));
 

@@ -33,13 +33,9 @@ const createRoutes = (app) => {
         res.send('Hello, World!');
     });
     app.get('/api/auth/google/callback', (req, res, next) => {
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         next();
     }, passport_1.default.authenticate('google', { failureRedirect: '/failed' }), authGoogleController_1.default.auth);
     app.get('/api/auth/google', (req, res, next) => {
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         next();
     }, passport_1.default.authenticate('google', { scope: ['profile', 'email'] }));
     app.post('/api/sign-up', authController_1.default.signUp);

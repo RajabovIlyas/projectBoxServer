@@ -9,7 +9,6 @@ import cookieSession from 'cookie-session';
 const customizationExpress=(app: Express)=>{
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(require('morgan')('dev'));
-  app.use(require('cors')());
 
   app.use(bodyParser.json());
   app.use(cookieSession({

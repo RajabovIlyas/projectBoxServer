@@ -10,7 +10,6 @@ const cookie_session_1 = __importDefault(require("cookie-session"));
 const customizationExpress = (app) => {
     app.use(body_parser_1.default.urlencoded({ extended: false }));
     app.use(require('morgan')('dev'));
-    app.use(require('cors')());
     app.use(body_parser_1.default.json());
     app.use(cookie_session_1.default({
         name: 'tuto-session',
