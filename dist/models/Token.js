@@ -22,6 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const TokenSchema = new mongoose_1.Schema({
     tokenId: { type: String, required: true },
-    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 exports.default = mongoose_1.default.model('Token', TokenSchema);

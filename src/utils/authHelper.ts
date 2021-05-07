@@ -16,7 +16,7 @@ export const generateAccessToken = () => {
 };
 
 export const replaceDbToken = (tokenId:string, userId:string) => {
-  Token.create({tokenId: tokenId, userId: userId});
+  Token.create({tokenId: tokenId, user: userId});
 };
 
 export const generateToken = async (userId: string) => {

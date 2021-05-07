@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {getDataSignUp, ISignUp} from './authType';
+import {getAuthData, getDataSignUp, IAuthMe, ISignUp} from './authType';
 import bcrypt, {compareSync} from 'bcryptjs';
 import {generateToken} from '../../utils/authHelper';
 import {sendMessage} from '../../utils/sendMessage';
@@ -76,9 +76,10 @@ const authMe = async (req: Request, res: Response) => {
   }
   const payload: payloadType = <payloadType>jwt.verify(token, secret);
   Token.findOne({tokenId: payload.id}).populate({path: 'user'}).exec()
-      .then((token)=>{
-        if (token) {
-          res.status(200).json(token.userId);
+      .then(async (token)=>{
+        if (token?.user) {
+          const user:IAuthMe=await getAuthData(token.user);
+          res.status(200).json(user);
         } else {
           throw 404;
         }

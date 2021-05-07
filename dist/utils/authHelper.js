@@ -29,7 +29,7 @@ const generateAccessToken = () => {
 };
 exports.generateAccessToken = generateAccessToken;
 const replaceDbToken = (tokenId, userId) => {
-    Token_1.default.create({ tokenId: tokenId, userId: userId });
+    Token_1.default.create({ tokenId: tokenId, user: userId });
 };
 exports.replaceDbToken = replaceDbToken;
 const generateToken = (userId) => __awaiter(void 0, void 0, void 0, function* () {

@@ -82,14 +82,15 @@ const authMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const payload = jsonwebtoken_1.default.verify(token, app_1.secret);
     Token_1.default.findOne({ tokenId: payload.id }).populate({ path: 'user' }).exec()
-        .then((token) => {
-        if (token) {
-            res.status(200).json(token.userId);
+        .then((token) => __awaiter(void 0, void 0, void 0, function* () {
+        if (token === null || token === void 0 ? void 0 : token.user) {
+            const user = yield authType_1.getAuthData(token.user);
+            res.status(200).json(user);
         }
         else {
             throw 404;
         }
-    })
+    }))
         .catch((err) => res.status(404).json('Токен не действителен'));
 });
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
