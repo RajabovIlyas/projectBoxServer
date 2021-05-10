@@ -8,7 +8,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const passport_1 = __importDefault(require("passport"));
 const cookie_session_1 = __importDefault(require("cookie-session"));
 const corsOptions = {
-    происхождение: ' http://example.com ',
+    origin: 'http://projectbox.pro/',
     optionsSuccessStatus: 200, //  некоторые устаревшие браузеры (IE11, различные SmartTV) задыхаются от 204
 };
 const customizationExpress = (app) => {

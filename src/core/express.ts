@@ -6,7 +6,7 @@ import passport from 'passport';
 import cookieSession from 'cookie-session';
 
 const corsOptions = {
-  происхождение: ' http://example.com ',
+  origin: 'http://projectbox.pro/',
   optionsSuccessStatus: 200, //  некоторые устаревшие браузеры (IE11, различные SmartTV) задыхаются от 204
 };
 
