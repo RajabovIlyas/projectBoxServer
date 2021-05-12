@@ -18,7 +18,7 @@ export interface IAuthMe {
 }
 
 export const getDataSignUp = async (req: Request): Promise<ISignUp|undefined> => {
-  return {name: req.body.name, surname: req.body.surname, email: req.body.email, password: req.body.password};
+  return {name: req.body.name, surname: req.body.surname, email: req.body.email.toLowerCase(), password: req.body.password};
 };
 
 export const getAuthData= async (user:IUser): Promise<IAuthMe>=>{

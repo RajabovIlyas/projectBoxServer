@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAuthData = exports.getDataSignUp = void 0;
 const getDataSignUp = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    return { name: req.body.name, surname: req.body.surname, email: req.body.email, password: req.body.password };
+    return { name: req.body.name, surname: req.body.surname, email: req.body.email.toLowerCase(), password: req.body.password };
 });
 exports.getDataSignUp = getDataSignUp;
 const getAuthData = (user) => __awaiter(void 0, void 0, void 0, function* () {

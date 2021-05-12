@@ -33,10 +33,21 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
 });
 const authorization = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    User_1.default.findByIdAndUpdate(req.params.id, { authorization: true }).exec()
+    User_1.default.findById(req.params.id).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
-        const token = yield authHelper_1.generateToken(req.params.id);
-        res.status(200).json({ token: token });
+        if (result === null || result === void 0 ? void 0 : result.authorization) {
+            res.status(411).json({ message: 'Пользовател уже прошел верификацию!' });
+        }
+        else if (result) {
+            User_1.default.findByIdAndUpdate(req.params.id, { authorization: true }).exec()
+                .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+                const token = yield authHelper_1.generateToken(req.params.id);
+                res.status(200).json({ token: token });
+            }));
+        }
+        else {
+            throw 404;
+        }
     }))
         .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
 });

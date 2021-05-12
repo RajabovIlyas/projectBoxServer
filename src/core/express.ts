@@ -4,17 +4,24 @@ import {Express} from 'express';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import cookieSession from 'cookie-session';
+import cors from 'cors';
 
 const corsOptions = {
   origin: '*',
-  optionsSuccessStatus: 200, //  некоторые устаревшие браузеры (IE11, различные SmartTV) задыхаются от 204
+  methods: 'GET, POST, PATCH, DELETE, PUT',
+  allowedHeaders: 'Content-Type, Authorization',
 };
 
 
 const customizationExpress=(app: Express)=>{
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(require('morgan')('dev'));
-  app.use(require('cors')(corsOptions));
+  app.use(cors({
+    origin: '*',
+    methods: 'GET, POST, PATCH, DELETE, PUT',
+    allowedHeaders: 'Content-Type, Authorization',
+
+  }));
 
   app.use(bodyParser.json());
   app.use(cookieSession({

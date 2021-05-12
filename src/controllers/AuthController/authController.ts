@@ -13,23 +13,32 @@ import Token from '../../models/Token';
 const signUp = async (req: Request, res: Response) => {
   const result: ISignUp | undefined = await getDataSignUp(req);
   User.create(result)
-      .then((result)=>{
+      .then((result) => {
         sendMessage(result)
             .then((result) => {
               res.status(200).json({message: 'Сылка для авторизации отправлено на почту'});
             })
             .catch(() => res.status(500).json({message: 'Отправка рассылки не получилась!'}));
       })
-      .catch((err)=>res.status(404).json({message: 'Не верно введены данные!'}));
+      .catch((err) => res.status(404).json({message: 'Не верно введены данные!'}));
 };
 
 const authorization = async (req: Request, res: Response) => {
-  User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
-      .then(async (result)=>{
-        const token = await generateToken(req.params.id);
-        res.status(200).json({token: token});
+  User.findById(req.params.id).exec()
+      .then(async (result) => {
+        if (result?.authorization) {
+          res.status(411).json({message: 'Пользовател уже прошел верификацию!'});
+        } else if (result) {
+          User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
+              .then(async (result)=>{
+                const token = await generateToken(req.params.id);
+                res.status(200).json({token: token});
+              });
+        } else {
+          throw 404;
+        }
       })
-      .catch((err)=>res.status(404).json({message: 'Не верно введены данные!'}));
+      .catch((err) => res.status(404).json({message: 'Не верно введены данные!'}));
 };
 
 const logIn = async (req: Request, res: Response) => {
@@ -76,15 +85,15 @@ const authMe = async (req: Request, res: Response) => {
   }
   const payload: payloadType = <payloadType>jwt.verify(token, secret);
   Token.findOne({tokenId: payload.id}).populate({path: 'user'}).exec()
-      .then(async (token)=>{
+      .then(async (token) => {
         if (token?.user) {
-          const user:IAuthMe=await getAuthData(token.user);
+          const user: IAuthMe = await getAuthData(token.user);
           res.status(200).json(user);
         } else {
           throw 404;
         }
       })
-      .catch((err)=>res.status(404).json('Токен не действителен'));
+      .catch((err) => res.status(404).json('Токен не действителен'));
 };
 
 const logout = async (req: Request, res: Response) => {
@@ -96,10 +105,10 @@ const logout = async (req: Request, res: Response) => {
   }
   const payload: payloadType = <payloadType>jwt.verify(token, secret);
   Token.findOneAndDelete({tokenId: payload.id}).exec()
-      .then((token)=>{
+      .then((token) => {
         res.status(200).json({message: 'Токен успешно удален'});
       })
-      .catch((err)=>res.status(404).json('Токен не действителен'));
+      .catch((err) => res.status(404).json('Токен не действителен'));
 };
 
 

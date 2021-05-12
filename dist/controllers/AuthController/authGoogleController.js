@@ -9,14 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const app_1 = require("../../core/app");
 const auth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     console.log('authGoogleGet', req.user);
     // @ts-ignore
-    if (req === null || req === void 0 ? void 0 : req.user.token) {
-        res.status(200).json(req.user);
+    const token = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.token;
+    if (token) {
+        yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${token}`);
+        //  res.status(200).json(req.user);
     }
     else {
         res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
+// const deleteAllToken = async (req: Request, res: Response) => {
+//   Token.
+//     res.status(500).json({message: 'Ошибка сервера'});
+//
+// };
 exports.default = { auth };
