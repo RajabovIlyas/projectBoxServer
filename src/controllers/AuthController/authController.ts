@@ -24,19 +24,26 @@ const signUp = async (req: Request, res: Response) => {
 };
 
 const authorization = async (req: Request, res: Response) => {
-  User.findById(req.params.id).exec()
-      .then(async (result) => {
-        if (result?.authorization) {
-          res.status(411).json({message: 'Пользовател уже прошел верификацию!'});
-        } else if (result) {
-          User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
-              .then(async (result)=>{
-                const token = await generateToken(req.params.id);
-                res.status(200).json({token: token});
-              });
-        } else {
-          throw 404;
-        }
+  // User.findById(req.params.id).exec()
+  //     .then(async (result) => {
+  //       if (result?.authorization) {
+  //         res.status(411).json({message: 'Пользовател уже прошел верификацию!'});
+  //       } else if (result) {
+  //         User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
+  //             .then(async (result)=>{
+  //               const token = await generateToken(req.params.id);
+  //               res.status(200).json({token: token});
+  //             });
+  //       } else {
+  //         throw 404;
+  //       }
+  //     });
+
+
+  User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
+      .then(async (result)=>{
+        const token = await generateToken(req.params.id);
+        res.status(200).json({token: token});
       })
       .catch((err) => res.status(404).json({message: 'Не верно введены данные!'}));
 };
