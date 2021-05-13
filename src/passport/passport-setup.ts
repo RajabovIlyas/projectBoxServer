@@ -4,7 +4,7 @@ import passportFacebook from 'passport-facebook';
 import {ISignUp} from '../controllers/AuthController/authType';
 import {v4 as uuid} from 'uuid';
 import {generateToken} from '../utils/authHelper';
-import {googleClient,facebookClient} from '../core/app';
+import {googleClient, facebookClient} from '../core/app';
 import User from '../models/User';
 
 passport.serializeUser((user, done)=> {
@@ -30,7 +30,7 @@ passport.deserializeUser((user:any, done)=> {
 passport.use(new passportGoogle.Strategy({
   clientID: googleClient.id,
   clientSecret: googleClient.secret,
-  callbackURL: '/api/auth/google/callback',
+  callbackURL: 'https://thawing-beach-08639.herokuapp.com/api/auth/google/callback',
 },
 (token, tokenSecret, profile, done)=> {
   // @ts-ignore
@@ -103,7 +103,7 @@ passport.use(new passportGoogle.Strategy({
 passport.use(new passportFacebook.Strategy({
   clientID: facebookClient.id,
   clientSecret: facebookClient.secret,
-  callbackURL: '/api/auth/facebook/callback',
+  callbackURL: 'https://thawing-beach-08639.herokuapp.com/api/auth/facebook/callback',
 },
 (accessToken, refreshToken, profile, cb) => {
   console.log(JSON.stringify(profile));
