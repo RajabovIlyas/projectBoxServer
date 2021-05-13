@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth20_1 = __importDefault(require("passport-google-oauth20"));
+const passport_facebook_1 = __importDefault(require("passport-facebook"));
 const uuid_1 = require("uuid");
 const authHelper_1 = require("../utils/authHelper");
 const app_1 = require("../core/app");
@@ -39,7 +40,7 @@ passport_1.default.deserializeUser((user, done) => {
 passport_1.default.use(new passport_google_oauth20_1.default.Strategy({
     clientID: app_1.googleClient.id,
     clientSecret: app_1.googleClient.secret,
-    callbackURL: 'http://localhost:5000/api/auth/google/callback',
+    callbackURL: '/api/auth/google/callback',
 }, (token, tokenSecret, profile, done) => {
     var _a, _b;
     // @ts-ignore
@@ -105,4 +106,12 @@ passport_1.default.use(new passport_google_oauth20_1.default.Strategy({
     //     }).catch((err)=>{
     //       done(err, undefined);
     //     });
+}));
+passport_1.default.use(new passport_facebook_1.default.Strategy({
+    clientID: app_1.facebookClient.id,
+    clientSecret: app_1.facebookClient.secret,
+    callbackURL: '/api/auth/facebook/callback',
+}, (accessToken, refreshToken, profile, cb) => {
+    console.log(JSON.stringify(profile));
+    return cb(null, profile);
 }));

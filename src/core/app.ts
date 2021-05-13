@@ -32,3 +32,8 @@ export const googleClient={
   id: process.env.CLIENT_ID_GOOGLE ? process.env.CLIENT_ID_GOOGLE : '',
   secret: process.env.CLIENT_SECRET_GOOGLE ? process.env.CLIENT_SECRET_GOOGLE : '',
 };
+
+export const facebookClient={
+  id: process.env.CLIENT_ID_FACEBOOK ? process.env.CLIENT_ID_FACEBOOK : '',
+  secret: process.env.CLIENT_SECRET_FACEBOOK ? process.env.CLIENT_SECRET_FACEBOOK : '',
+};

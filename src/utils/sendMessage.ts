@@ -4,7 +4,7 @@ import {sendMessageData} from '../core/app';
 
 const htmlMessageAuthorization = (user: IUser) => {
   return (`<div style="text-align: center">`+
-        `<img src="https://line-logic.by/static/media/Projectbox_logo_with_slogan_inverse_orange_on_transparente.b8f0d393.png">` +
+        `<img src="http://projectbox.pro/static/media/Projectbox_logo_with_slogan_inverse_orange_on_transparente_.41fac85d.png">` +
         `<p>Здравствуйте, ${user.name + ' ' + user.surname}<br/>` +
         'Благодарим Вас за регистрацию на сайте ProjectBox.pro<br/>' +
         'Чтобы завершить регистрацию, перейдите по ссылке:<br/>' +

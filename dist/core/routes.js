@@ -25,19 +25,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const authController_1 = __importDefault(require("../controllers/AuthController/authController"));
 const passport_1 = __importDefault(require("passport"));
 const passport_2 = __importDefault(require("../middlewares/passport"));
-const authGoogleController_1 = __importDefault(require("../controllers/AuthController/authGoogleController"));
+const authMessengerController_1 = __importDefault(require("../controllers/AuthController/authMessengerController"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerDocument = __importStar(require("../docAPI/swagger.json"));
 const createRoutes = (app) => {
     app.get('/', (req, res) => {
         res.send('Hello, World!');
     });
-    app.get('/api/auth/google/callback', (req, res, next) => {
-        next();
-    }, passport_1.default.authenticate('google', { failureRedirect: '/failed' }), authGoogleController_1.default.auth);
-    app.get('/api/auth/google', (req, res, next) => {
-        next();
-    }, passport_1.default.authenticate('google', { scope: ['profile', 'email'] }));
+    app.get('/api/auth/google/callback', passport_1.default.authenticate('google', { failureRedirect: '/failed' }), authMessengerController_1.default.authGoogle);
+    app.get('/api/auth/google', passport_1.default.authenticate('google', { scope: ['profile', 'email'] }));
+    app.get('/api/auth/facebook', passport_1.default.authenticate('facebook'));
+    app.get('/api/auth/facebook/callback', passport_1.default.authenticate('facebook'), authMessengerController_1.default.authFacebook);
     app.post('/api/sign-up', authController_1.default.signUp);
     app.put('/api/authorization/:id', authController_1.default.authorization);
     app.post('/api/log-in', authController_1.default.logIn);

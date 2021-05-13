@@ -2,7 +2,7 @@ import {NextFunction, Request, Response, Router} from 'express';
 import Auth from '../controllers/AuthController/authController';
 import passport from 'passport';
 import middlewares from '../middlewares/passport';
-import authGoogle from '../controllers/AuthController/authGoogleController';
+import authMessenger from '../controllers/AuthController/authMessengerController';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from '../docAPI/swagger.json';
 
@@ -11,14 +11,12 @@ const createRoutes = (app: Router) => {
     res.send('Hello, World!');
   });
 
-  app.get('/api/auth/google/callback', (req:Request, res:Response, next:NextFunction)=>{
+  app.get('/api/auth/google/callback', passport.authenticate('google', {failureRedirect: '/failed'}), authMessenger.authGoogle);
+  app.get('/api/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 
-    next();
-  }, passport.authenticate('google', {failureRedirect: '/failed'}), authGoogle.auth);
-  app.get('/api/auth/google', (req:Request, res:Response, next:NextFunction)=>{
-
-    next();
-  }, passport.authenticate('google', {scope: ['profile', 'email']}));
+  app.get('/api/auth/facebook', passport.authenticate('facebook'));
+  app.get('/api/auth/facebook/callback',
+      passport.authenticate('facebook'), authMessenger.authFacebook);
 
 
   app.post('/api/sign-up', Auth.signUp);

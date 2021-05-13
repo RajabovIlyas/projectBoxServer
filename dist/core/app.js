@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.googleClient = exports.sendMessageData = exports.tokens = exports.secret = exports.MONGO_URI = exports.PORT = void 0;
+exports.facebookClient = exports.googleClient = exports.sendMessageData = exports.tokens = exports.secret = exports.MONGO_URI = exports.PORT = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.PORT = process.env.PORT ? Number(process.env.PORT) : 5000;
@@ -28,4 +28,8 @@ exports.sendMessageData = {
 exports.googleClient = {
     id: process.env.CLIENT_ID_GOOGLE ? process.env.CLIENT_ID_GOOGLE : '',
     secret: process.env.CLIENT_SECRET_GOOGLE ? process.env.CLIENT_SECRET_GOOGLE : '',
+};
+exports.facebookClient = {
+    id: process.env.CLIENT_ID_FACEBOOK ? process.env.CLIENT_ID_FACEBOOK : '',
+    secret: process.env.CLIENT_SECRET_FACEBOOK ? process.env.CLIENT_SECRET_FACEBOOK : '',
 };
