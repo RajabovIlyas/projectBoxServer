@@ -57,45 +57,6 @@ passport.use(new passportGoogle.Strategy({
         }
       })
       .catch((err)=> done(err, profile));
-
-
-  // connect()
-  //     .then((conn) => {
-  //       if (!profile.emails?.values) {
-  //         throw 404;
-  //       }
-  //       conn.query(`SELECT id FROM user WHERE email='${profile?.emails[0]?.value}'`)
-  //           .then(async (result)=>{
-  //             // @ts-ignore
-  //             if (result[0][0]) {
-  //               // @ts-ignore
-  //               done(null, {token: await generateToken(result[0][0].id)});
-  //             } else {
-  //               if (!profile.emails?.values) {
-  //                 throw 404;
-  //               }
-  //               const signUpData:ISignUp={
-  //                 surname: profile.name?.familyName,
-  //                 name: profile.name?.givenName,
-  //                 email: profile.emails[0].value,
-  //                 id: uuid(),
-  //                 password: uuid(),
-  //               };
-  //               conn.query(`INSERT INTO user (id,name,surname,email,password,authorization) VALUES ('${signUpData.id}', '${signUpData.name}'
-  //                     ,'${signUpData.surname}','${signUpData.email}','${signUpData.password}',true)`)
-  //                   .then(async (dataStatus) => {
-  //                     done(null, {token: await generateToken(signUpData.id)});
-  //                   })
-  //                   .catch((err) => done(err, undefined));
-  //             }
-  //             return;
-  //           })
-  //           .catch((err)=>{
-  //             done(err, undefined);
-  //           });
-  //     }).catch((err)=>{
-  //       done(err, undefined);
-  //     });
 },
 ));
 
@@ -104,6 +65,8 @@ passport.use(new passportFacebook.Strategy({
   clientID: facebookClient.id,
   clientSecret: facebookClient.secret,
   callbackURL: 'https://thawing-beach-08639.herokuapp.com/api/auth/facebook/callback',
+  profileFields: ['id', 'displayName', 'photos', 'email'],
+  enableProof: true,
 },
 (accessToken, refreshToken, profile, cb) => {
   console.log(JSON.stringify(profile));
