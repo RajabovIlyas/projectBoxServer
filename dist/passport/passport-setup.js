@@ -40,7 +40,7 @@ passport_1.default.deserializeUser((user, done) => {
 passport_1.default.use(new passport_google_oauth20_1.default.Strategy({
     clientID: app_1.googleClient.id,
     clientSecret: app_1.googleClient.secret,
-    callbackURL: 'https://thawing-beach-08639.herokuapp.com/api/auth/google/callback',
+    callbackURL: app_1.projectUrl + '/api/auth/google/callback',
 }, (token, tokenSecret, profile, done) => {
     var _a, _b;
     // @ts-ignore
@@ -73,7 +73,7 @@ passport_1.default.use(new passport_google_oauth20_1.default.Strategy({
 passport_1.default.use(new passport_facebook_1.default.Strategy({
     clientID: app_1.facebookClient.id,
     clientSecret: app_1.facebookClient.secret,
-    callbackURL: 'https://thawing-beach-08639.herokuapp.com/api/auth/facebook/callback',
+    callbackURL: app_1.projectUrl + '/api/auth/facebook/callback',
     profileFields: ['id', 'displayName', 'photos', 'email'],
     enableProof: true,
 }, (accessToken, refreshToken, profile, cb) => {

@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.facebookClient = exports.googleClient = exports.sendMessageData = exports.tokens = exports.secret = exports.MONGO_URI = exports.PORT = void 0;
+exports.facebookClient = exports.googleClient = exports.sendMessageData = exports.tokens = exports.secret = exports.MONGO_URI = exports.projectUrl = exports.PORT = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.PORT = process.env.PORT ? Number(process.env.PORT) : 5000;
-exports.MONGO_URI = process.env.MONGO_URI ? process.env.MONGO_URI :
-    'mongodb+srv://root:root@beautysalon.hsvsc.mongodb.net/projectboxpro?retryWrites=true&w=majority';
+exports.projectUrl = process.env.PROJECT_URL ? process.env.PROJECT_URL : '';
+exports.MONGO_URI = process.env.MONGO_URI ? process.env.MONGO_URI : '';
 exports.secret = process.env.JWT_SECRET ? process.env.JWT_SECRET : '/78"5ad^V62q6oM6sn`k?cIN"|JF%d';
 exports.tokens = {
     access: {

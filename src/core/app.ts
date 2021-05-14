@@ -5,8 +5,9 @@ dotenv.config();
 
 export const PORT: number = process.env.PORT ? Number(process.env.PORT) : 5000;
 
-export const MONGO_URI: string = process.env.MONGO_URI ? process.env.MONGO_URI :
-    'mongodb+srv://root:root@beautysalon.hsvsc.mongodb.net/projectboxpro?retryWrites=true&w=majority';
+export const projectUrl:string =process.env.PROJECT_URL ? process.env.PROJECT_URL : '';
+
+export const MONGO_URI: string = process.env.MONGO_URI ? process.env.MONGO_URI : '';
 
 
 export const secret:string =process.env.JWT_SECRET ? process.env.JWT_SECRET : '/78"5ad^V62q6oM6sn`k?cIN"|JF%d';
