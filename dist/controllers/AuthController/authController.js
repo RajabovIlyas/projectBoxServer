@@ -28,31 +28,37 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .then((result) => {
             res.status(200).json({ message: 'Сылка для авторизации отправлено на почту' });
         })
-            .catch(() => res.status(500).json({ message: 'Отправка рассылки не получилась!' }));
+            .catch(() => __awaiter(void 0, void 0, void 0, function* () {
+            yield User_1.default.findByIdAndDelete(result.id);
+            yield res.status(500).json({ message: 'Отправка рассылки не получилась!' });
+        }));
     })
         .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
 });
 const authorization = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // User.findById(req.params.id).exec()
-    //     .then(async (result) => {
-    //       if (result?.authorization) {
-    //         res.status(411).json({message: 'Пользовател уже прошел верификацию!'});
-    //       } else if (result) {
-    //         User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
-    //             .then(async (result)=>{
-    //               const token = await generateToken(req.params.id);
-    //               res.status(200).json({token: token});
-    //             });
-    //       } else {
-    //         throw 404;
-    //       }
-    //     });
-    User_1.default.findByIdAndUpdate(req.params.id, { authorization: true }).exec()
+    User_1.default.findById(req.params.id).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
-        const token = yield authHelper_1.generateToken(req.params.id);
-        res.status(200).json({ token: token });
-    }))
-        .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
+        if (result === null || result === void 0 ? void 0 : result.authorization) {
+            res.status(411).json({ message: 'Пользовател уже прошел верификацию!' });
+        }
+        else if (result) {
+            User_1.default.findByIdAndUpdate(req.params.id, { authorization: true }).exec()
+                .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+                const token = yield authHelper_1.generateToken(req.params.id);
+                res.status(200).json({ token: token });
+            }));
+        }
+        else {
+            throw 404;
+        }
+    }));
+    //
+    // User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
+    //     .then(async (result)=>{
+    //       const token = await generateToken(req.params.id);
+    //       res.status(200).json({token: token});
+    //     })
+    //     .catch((err) => res.status(404).json({message: 'Не верно введены данные!'}));
 });
 const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;

@@ -23,11 +23,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const authController_1 = __importDefault(require("../controllers/AuthController/authController"));
+const providerController_1 = __importDefault(require("../controllers/ProviderController/providerController"));
 const passport_1 = __importDefault(require("passport"));
 const passport_2 = __importDefault(require("../middlewares/passport"));
 const authMessengerController_1 = __importDefault(require("../controllers/AuthController/authMessengerController"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerDocument = __importStar(require("../docAPI/swagger.json"));
+const Token_1 = __importDefault(require("../models/Token"));
 const createRoutes = (app) => {
     app.get('/', (req, res) => {
         res.send('Hello, World!');
@@ -41,6 +43,12 @@ const createRoutes = (app) => {
     app.post('/api/log-in', authController_1.default.logIn);
     app.get('/api/auth-me', passport_2.default.authMiddleware, authController_1.default.authMe);
     app.delete('/api/logout', passport_2.default.authMiddleware, authController_1.default.logout);
+    app.post('/api/provider', providerController_1.default.create);
+    app.delete('/api/token', (req, res) => {
+        Token_1.default.deleteMany().exec()
+            .then((result) => res.status(200).json({}))
+            .catch((err) => res.status(500).json({}));
+    });
     app.use('/api', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 };
 exports.default = createRoutes;

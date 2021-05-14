@@ -193,6 +193,56 @@
           }
         }
       }
+    },
+    "/api/provider": {
+      "post": {
+        "summary": "Регистрация поставщика",
+        "tags": [
+          "Запросы авторизации API"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nameCompany": {
+                    "type": "string"
+                  },
+                  "fullName": {
+                    "type": "string"
+                  },
+                  "position": {
+                    "type": "string"
+                  },
+                  "companyDescription": {
+                    "type": "string"
+                  },
+                  "bestProducts": {
+                    "type": "string"
+                  },
+                  "siteCompany": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "В объекте body, должны быть все ниже перечисленные параметры",
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
     }
   }
 }

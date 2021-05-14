@@ -16,7 +16,7 @@ const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     // @ts-ignore
     const token = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.token;
     if (token) {
-        yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/#/google/${token}`);
+        yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${token}`);
         //  res.status(200).json(req.user);
     }
     else {

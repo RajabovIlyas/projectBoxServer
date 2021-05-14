@@ -21,6 +21,7 @@ exports.tokens = {
     },
 };
 exports.sendMessageData = {
+    emailCompany: process.env.EMAIL_COMPANY ? process.env.EMAIL_COMPANY : '',
     login: process.env.EMAIL_LOGIN ? process.env.EMAIL_LOGIN : '',
     password: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD : '',
     urlProjectBox: process.env.URL_PROJECT_BOX ? process.env.URL_PROJECT_BOX : '',

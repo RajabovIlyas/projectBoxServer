@@ -9,23 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAuthData = exports.getDataSignUp = void 0;
-const getDataSignUp = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email } = req.body;
-    if (email) {
+exports.getDataProvider = void 0;
+const validateEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+};
+const getDataProvider = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    if (validateEmail(req.body.email)) {
         return {
-            name: req.body.name,
-            surname: req.body.surname,
-            email: email.toLowerCase(),
-            password: req.body.password,
+            nameCompany: req.body.nameCompany,
+            fullName: req.body.fullName,
+            position: req.body.position,
+            companyDescription: req.body.companyDescription,
+            bestProducts: req.body.bestProducts,
+            siteCompany: req.body.siteCompany,
+            phone: req.body.phone,
+            email: req.body.email.toLowerCase(),
         };
     }
     else {
         return undefined;
     }
 });
-exports.getDataSignUp = getDataSignUp;
-const getAuthData = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    return { id: user._id, name: user.name, surname: user.surname, email: user.email };
-});
-exports.getAuthData = getAuthData;
+exports.getDataProvider = getDataProvider;
