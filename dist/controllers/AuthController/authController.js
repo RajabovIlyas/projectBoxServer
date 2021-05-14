@@ -33,7 +33,14 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             yield res.status(500).json({ message: 'Отправка рассылки не получилась!' });
         }));
     })
-        .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
+        .catch((err) => {
+        if (err.message.indexOf('E11000') !== -1) {
+            res.status(401).json({ message: 'Такой email уже существует!' });
+        }
+        else {
+            res.status(404).json({ message: 'Не верно введены данные!' });
+        }
+    });
 });
 const authorization = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     User_1.default.findById(req.params.id).exec()
