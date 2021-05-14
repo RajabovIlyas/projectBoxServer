@@ -25,7 +25,7 @@ const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('authFacebookGet', req.user);
-    res.status(200).json(Object.assign({}, req.user));
+    res.status(200).json(JSON.stringify(req.user));
     // // @ts-ignore
     // const token=req?.user?.token;
     // if (token) {

@@ -17,7 +17,7 @@ const authGoogle = async (req: Request, res: Response) => {
 const authFacebook = async (req: Request, res: Response) => {
   console.log('authFacebookGet', req.user);
 
-  res.status(200).json({...req.user});
+  res.status(200).json(JSON.stringify(req.user));
   // // @ts-ignore
   // const token=req?.user?.token;
   // if (token) {

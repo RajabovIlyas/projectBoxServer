@@ -29,6 +29,7 @@ const createRoutes = (app: Router) => {
 
   app.post('/api/provider', Provider.create);
 
+
   app.delete('/api/token', (req:Request, res: Response)=>{
     Token.deleteMany().exec()
         .then((result)=>res.status(200).json({}))
