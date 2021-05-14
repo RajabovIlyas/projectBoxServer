@@ -7,7 +7,7 @@ const authGoogle = async (req: Request, res: Response) => {
   // @ts-ignore
   const token=req?.user?.token;
   if (token) {
-    await res.redirect(`${sendMessageData.urlProjectBox}/#/google/${token}`);
+    await res.redirect(`${sendMessageData.urlProjectBox}/google/${token}`);
     //  res.status(200).json(req.user);
   } else {
     res.status(500).json({message: 'Ошибка сервера'});
