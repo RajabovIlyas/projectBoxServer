@@ -98,6 +98,6 @@ passport.use(new passportFacebook.Strategy({
   //       }
   //     })
   //     .catch((err)=> done(err, profile));
-
-  done(null, signUpData);
+  console.log(signUpData);
+  done(null, {...profile, signUpData});
 }));
