@@ -36,6 +36,6 @@ const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     //   email: email,
     //   password: uuid(),
     // };
-    res.status(200).json({ signUpData });
+    res.status(200).json(req.user);
 });
 exports.default = { authRedirect, authFacebook };

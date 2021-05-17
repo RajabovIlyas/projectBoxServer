@@ -33,7 +33,7 @@ const authFacebook = async (req: Request, res: Response) => {
   //   password: uuid(),
   // };
 
-  res.status(200).json({signUpData});
+  res.status(200).json(req.user);
 };
 
 export default {authRedirect, authFacebook};
