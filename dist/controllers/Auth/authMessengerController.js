@@ -8,8 +8,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = require("../../core/app");
+const uuid_1 = require("uuid");
+const authHelper_1 = require("../../utils/authHelper");
+const User_1 = __importDefault(require("../../models/User"));
+const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('ilyas', signUpData);
+    User_1.default.findOne({ email: signUpData.email }).exec()
+        .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+        if (result === null || result === void 0 ? void 0 : result.id) {
+            yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${authHelper_1.generateToken(result.id)}`);
+        }
+        else {
+            User_1.default.create(Object.assign(Object.assign({}, signUpData), { authorization: true }))
+                .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+                if (result === null || result === void 0 ? void 0 : result.id) {
+                    yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${authHelper_1.generateToken(result.id)}`);
+                }
+                else {
+                    throw 500;
+                }
+            })).catch((err) => res.redirect(`${app_1.sendMessageData.urlProjectBox}`));
+        }
+    }))
+        .catch((err) => res.redirect(`${app_1.sendMessageData.urlProjectBox}`));
+});
 const authRedirect = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     console.log('authGoogleGet', req.user);
@@ -27,15 +54,14 @@ const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     console.log('authFacebookGet', req.user);
     // @ts-ignore
     const email = req.user.emails[0].value;
-    // // @ts-ignore
-    // const fullName:{givenName:string, familyName:string}=req.user.name;
-    //
-    // const signUpData:ISignUp={
-    //   surname: fullName.familyName,
-    //   name: fullName.givenName,
-    //   email: email,
-    //   password: uuid(),
-    // };
-    res.status(200).json(req.user);
+    // @ts-ignore
+    const fullName = req.user.name;
+    const signUpData = {
+        surname: fullName.familyName,
+        name: fullName.givenName,
+        email: email,
+        password: uuid_1.v4(),
+    };
+    yield sendToken(signUpData, res);
 });
 exports.default = { authRedirect, authFacebook };
