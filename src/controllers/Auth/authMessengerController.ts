@@ -21,9 +21,13 @@ const authFacebook = async (req: Request, res: Response) => {
 
   // @ts-ignore
   const email=req.user.email[0].value;
+  // @ts-ignore
+  const surname=req.user?.name?.familyName;
+  // @ts-ignore
+  const name=req.user?.name?.givenName;
   const signUpData:ISignUp={
-    surname: req.user?.name?.familyName,
-    name: req.user?.name?.givenName,
+    surname: surname,
+    name: name,
     email: email,
     password: uuid(),
   };

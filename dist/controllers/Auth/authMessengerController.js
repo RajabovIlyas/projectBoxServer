@@ -29,9 +29,13 @@ const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     console.log('authFacebookGet', req.user);
     // @ts-ignore
     const email = req.user.email[0].value;
+    // @ts-ignore
+    const surname = (_c = (_b = req.user) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.familyName;
+    // @ts-ignore
+    const name = (_e = (_d = req.user) === null || _d === void 0 ? void 0 : _d.name) === null || _e === void 0 ? void 0 : _e.givenName;
     const signUpData = {
-        surname: (_c = (_b = req.user) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.familyName,
-        name: (_e = (_d = req.user) === null || _d === void 0 ? void 0 : _d.name) === null || _e === void 0 ? void 0 : _e.givenName,
+        surname: surname,
+        name: name,
         email: email,
         password: uuid_1.v4(),
     };
