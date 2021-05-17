@@ -76,15 +76,7 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
     callbackURL: app_1.projectUrl + '/api/auth/facebook/callback',
     profileFields: ['id', 'email', 'name'],
 }, (accessToken, refreshToken, profile, done) => {
-    var _a, _b;
     // @ts-ignore
-    const email = profile.email[0].value;
-    const signUpData = {
-        surname: (_a = profile.name) === null || _a === void 0 ? void 0 : _a.familyName,
-        name: (_b = profile.name) === null || _b === void 0 ? void 0 : _b.givenName,
-        email: email,
-        password: uuid_1.v4(),
-    };
     // console.log('ilyas', signUpData);
     // User.findOne({email: signUpData.email}).exec()
     //     .then(async (result)=>{
@@ -102,5 +94,5 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
     //       }
     //     })
     //     .catch((err)=> done(err, profile));
-    done(null, signUpData);
+    done(null, profile);
 }));
