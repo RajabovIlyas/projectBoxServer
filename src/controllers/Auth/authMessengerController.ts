@@ -11,12 +11,12 @@ const sendToken=async (signUpData: ISignUp, res: Response) => {
   await User.findOne({email: signUpData.email}).exec()
       .then(async (result)=>{
         if (result?.id) {
-          await res.redirect(`${sendMessageData.urlProjectBox}/google/${generateToken(result.id)}`);
+          await res.redirect(`${sendMessageData.urlProjectBox}/google/${await generateToken(result.id)}`);
         } else {
           User.create({...signUpData, authorization: true})
               .then(async (result)=>{
                 if (result?.id) {
-                  await res.redirect(`${sendMessageData.urlProjectBox}/google/${generateToken(result.id)}`);
+                  await res.redirect(`${sendMessageData.urlProjectBox}/google/${await generateToken(result.id)}`);
                 } else {
                   throw 500;
                 }

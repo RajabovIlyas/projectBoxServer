@@ -21,13 +21,13 @@ const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, functio
     yield User_1.default.findOne({ email: signUpData.email }).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
         if (result === null || result === void 0 ? void 0 : result.id) {
-            yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${authHelper_1.generateToken(result.id)}`);
+            yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${yield authHelper_1.generateToken(result.id)}`);
         }
         else {
             User_1.default.create(Object.assign(Object.assign({}, signUpData), { authorization: true }))
                 .then((result) => __awaiter(void 0, void 0, void 0, function* () {
                 if (result === null || result === void 0 ? void 0 : result.id) {
-                    yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${authHelper_1.generateToken(result.id)}`);
+                    yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${yield authHelper_1.generateToken(result.id)}`);
                 }
                 else {
                     throw 500;
