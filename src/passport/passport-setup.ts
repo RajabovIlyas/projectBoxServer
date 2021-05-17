@@ -71,16 +71,6 @@ passport.use(new passportFacebook.Strategy({
 (accessToken, refreshToken, profile, done) => {
   // @ts-ignore
 
-
-  const fullName:{givenName:string, familyName:string}=profile.user.name;
-  // @ts-ignore
-  const email=profile.emails[0].value;
-  const signUpData:ISignUp={
-    surname: fullName.familyName,
-    name: fullName.givenName,
-    email: email,
-    password: uuid(),
-  };
   // console.log('ilyas', signUpData);
   // User.findOne({email: signUpData.email}).exec()
   //     .then(async (result)=>{
@@ -98,6 +88,5 @@ passport.use(new passportFacebook.Strategy({
   //       }
   //     })
   //     .catch((err)=> done(err, profile));
-  console.log(signUpData);
-  done(null, {...profile, signUpData});
+  done(null, profile);
 }));
