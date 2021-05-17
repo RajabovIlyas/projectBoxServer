@@ -23,4 +23,16 @@ const authRedirect = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
-exports.default = { authRedirect };
+const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('authFacebookGet', req.user);
+    res.status(200).json(req.user);
+    // // @ts-ignore
+    // const token=req?.user?.token;
+    // if (token) {
+    //   await res.redirect(`${sendMessageData.urlProjectBox}/google/${token}`);
+    //   //  res.status(200).json(req.user);
+    // } else {
+    //   res.status(500).json({message: 'Ошибка сервера'});
+    // }
+});
+exports.default = { authRedirect, authFacebook };
