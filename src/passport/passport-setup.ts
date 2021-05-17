@@ -66,7 +66,7 @@ passport.use(new passportFacebook.Strategy({
   clientSecret: facebookClient.secret,
   callbackURL: projectUrl+'/api/auth/facebook/callback',
   passReqToCallback: true,
-  profileFields: ['id', 'displayName', 'email', 'emails', 'name', 'surname'],
+  profileFields: ['id', 'emails', 'name'],
 
 },
 (accessToken, refreshToken, profile, cb) => {
