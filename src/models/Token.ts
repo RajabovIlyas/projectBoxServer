@@ -3,7 +3,7 @@ import {IUser} from './User';
 
 export interface IToken extends Document {
     tokenId: string;
-    user: IUser;
+    user: string;
 }
 
 const TokenSchema: Schema = new Schema({

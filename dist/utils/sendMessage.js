@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendMessageCompany = exports.sendMessage = void 0;
+exports.sendMessageCourses = exports.sendMessageCompany = exports.sendMessage = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const app_1 = require("../core/app");
 const htmlMessageAuthorization = (user) => {
@@ -33,6 +33,13 @@ const htmlMessageProvider = (provider) => {
         `Название компании: ${provider.nameCompany}<br/>` +
         `Краткое описание компании: ${provider.companyDescription}<br/>` +
         `Лучшие проекты: ${provider.bestProducts}</p></div>`);
+};
+const htmlMessageCourses = (course) => {
+    return (`<div style="text-align: center">` +
+        `<img src="http://projectbox.pro/static/media/Projectbox_logo_with_slogan_inverse_orange_on_transparente_.41fac85d.png">` +
+        `<p>Хочет записаться на курс ${course.name} ${course.surname}<br/>` +
+        `Email: ${course.email}<br/>` +
+        `Номер телефона: ${course.phone}</p></div>`);
 };
 const sendMessage = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = yield nodemailer_1.default.createTransport({
@@ -74,3 +81,23 @@ const sendMessageCompany = (provider) => __awaiter(void 0, void 0, void 0, funct
     });
 });
 exports.sendMessageCompany = sendMessageCompany;
+const sendMessageCourses = (course) => __awaiter(void 0, void 0, void 0, function* () {
+    const transporter = yield nodemailer_1.default.createTransport({
+        host: 'smtp.yandex.ru',
+        service: 'Yandex',
+        port: 465,
+        secure: true,
+        auth: {
+            user: app_1.sendMessageData.login,
+            pass: app_1.sendMessageData.password,
+        },
+    });
+    return transporter.sendMail({
+        from: '<rajabovilya@yandex.ru>',
+        to: app_1.sendMessageData.emailCompany,
+        subject: 'Provider for ProjectBox.pro ✔',
+        text: course.name,
+        html: htmlMessageCourses(course),
+    });
+});
+exports.sendMessageCourses = sendMessageCourses;

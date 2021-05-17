@@ -25,6 +25,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     Token.findOne({tokenId: payload.id}).exec()
         .then((result)=>{
           if (result) {
+            req.userId =result.user;
             next();
           } else {
             throw 404;

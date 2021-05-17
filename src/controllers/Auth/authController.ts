@@ -24,7 +24,7 @@ const signUp = async (req: Request, res: Response) => {
             });
       })
       .catch((err) => {
-        if (err.message.indexOf('E11000')!==-1) {
+        if (err.message.indexOf('E11000') !== -1) {
           res.status(401).json({message: 'Такой email уже существует!'});
         } else {
           res.status(404).json({message: 'Не верно введены данные!'});
@@ -39,7 +39,7 @@ const authorization = async (req: Request, res: Response) => {
           res.status(411).json({message: 'Пользовател уже прошел верификацию!'});
         } else if (result) {
           User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
-              .then(async (result)=>{
+              .then(async (result) => {
                 const token = await generateToken(req.params.id);
                 res.status(200).json({token: token});
               });
@@ -93,23 +93,18 @@ const logIn = async (req: Request, res: Response) => {
 
 
 const authMe = async (req: Request, res: Response) => {
-  const authHeader = req.get('Authorization');
-  const token = authHeader?.substr(7);
-  if (!token) {
-    res.status(401).json({message: 'Токен не представлен'});
-    return;
-  }
-  const payload: payloadType = <payloadType>jwt.verify(token, secret);
-  Token.findOne({tokenId: payload.id}).populate({path: 'user'}).exec()
-      .then(async (token) => {
-        if (token?.user) {
-          const user: IAuthMe = await getAuthData(token.user);
+  User.findById(req.userId).exec()
+      .then(async (result)=>{
+        if (result) {
+          const user: IAuthMe = await getAuthData(result);
           res.status(200).json(user);
         } else {
           throw 404;
         }
       })
-      .catch((err) => res.status(404).json('Токен не действителен'));
+      .catch((err)=>{
+        res.status(404).json({message: 'Пользователь с таким id не найден!'});
+      });
 };
 
 const logout = async (req: Request, res: Response) => {

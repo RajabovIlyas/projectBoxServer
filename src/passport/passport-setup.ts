@@ -1,7 +1,7 @@
 import passport from 'passport';
 import passportGoogle from 'passport-google-oauth20';
 import passportFacebook from 'passport-facebook';
-import {ISignUp} from '../controllers/AuthController/authType';
+import {ISignUp} from '../controllers/Auth/authType';
 import {v4 as uuid} from 'uuid';
 import {generateToken} from '../utils/authHelper';
 import {googleClient, facebookClient, projectUrl} from '../core/app';
@@ -65,10 +65,11 @@ passport.use(new passportFacebook.Strategy({
   clientID: facebookClient.id,
   clientSecret: facebookClient.secret,
   callbackURL: projectUrl+'/api/auth/facebook/callback',
-  profileFields: ['id', 'displayName', 'email'],
-  enableProof: true,
+  passReqToCallback: true,
+  profileFields: ['id', 'displayName', 'email', 'emails', 'name', 'surname'],
+
 },
-(accessToken, refreshToken, profile, cb) => {
+(accessToken, refreshToken, profile, done) => {
   console.log('ilyas_facebook', JSON.stringify(profile));
-  return cb(null, profile);
+  return done(null, JSON.stringify(profile));
 }));

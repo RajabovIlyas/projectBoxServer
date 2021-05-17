@@ -1,8 +1,9 @@
-import express from 'express';
+import express, {Request, Response} from 'express';
 import {PORT, MONGO_URI} from './core/app';
 import customizationExpress from './core/express';
-import createRoutes from './core/routes';
+import createRoutes from './router/routes';
 import mongoose from 'mongoose';
+import router from "./router/routes";
 
 require('./passport/passport-setup');
 
@@ -11,7 +12,12 @@ const app = express();
 
 
 customizationExpress(app);
-createRoutes(app);
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello, World!');
+});
+
+app.use('/api', createRoutes);
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,

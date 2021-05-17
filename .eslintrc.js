@@ -21,5 +21,6 @@ module.exports = {
     'no-throw-literal': 0,
     'no-unused-vars': 0,
     'no-invalid-this': 0,
+    'new-cap': 0,
   },
 };
