@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = require("../../core/app");
+const uuid_1 = require("uuid");
 const authRedirect = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     console.log('authGoogleGet', req.user);
@@ -24,19 +25,17 @@ const authRedirect = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
     console.log('authFacebookGet', req.user);
-    // // @ts-ignore
-    // const email=req.user.emails[0].value;
-    // const surname=req.user?.name?.familyName;
-    // const name=req.user?.name?.givenName;
-    // const signUpData:ISignUp={
-    //   surname: surname,
-    //   name: name,
-    //   email: email,
-    //   password: uuid(),
-    // };
     // @ts-ignore
-    res.status(200).json({ surname: (_b = req.user.name) === null || _b === void 0 ? void 0 : _b.familyName });
+    const email = req.user.emails[0].value;
+    // @ts-ignore
+    const fullName = req.user.name;
+    const signUpData = {
+        surname: fullName.familyName,
+        name: fullName.givenName,
+        email: email,
+        password: uuid_1.v4(),
+    };
+    res.status(200).json({ signUpData });
 });
 exports.default = { authRedirect, authFacebook };
