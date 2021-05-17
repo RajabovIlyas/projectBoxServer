@@ -75,8 +75,8 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
     clientSecret: app_1.facebookClient.secret,
     callbackURL: app_1.projectUrl + '/api/auth/facebook/callback',
     passReqToCallback: true,
-    profileFields: ['id', 'displayName', 'email', 'emails'],
-}, (accessToken, refreshToken, profile, done) => {
+    profileFields: ['id', 'displayName', 'email', 'emails', 'name', 'surname'],
+}, (accessToken, refreshToken, profile, cb) => {
     console.log('ilyas_facebook', JSON.stringify(profile));
-    return done(null, JSON.stringify(profile));
+    return cb(null, profile);
 }));

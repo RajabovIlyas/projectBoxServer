@@ -33,7 +33,7 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         Token_1.default.findOne({ tokenId: payload.id }).exec()
             .then((result) => {
             if (result) {
-                req.userId = result.user;
+                req.user = result.user;
                 next();
             }
             else {

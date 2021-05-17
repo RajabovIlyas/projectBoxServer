@@ -66,10 +66,10 @@ passport.use(new passportFacebook.Strategy({
   clientSecret: facebookClient.secret,
   callbackURL: projectUrl+'/api/auth/facebook/callback',
   passReqToCallback: true,
-  profileFields: ['id', 'displayName', 'email', 'emails'],
+  profileFields: ['id', 'displayName', 'email', 'emails', 'name', 'surname'],
 
 },
-(accessToken, refreshToken, profile, done) => {
+(accessToken, refreshToken, profile, cb) => {
   console.log('ilyas_facebook', JSON.stringify(profile));
-  return done(null, JSON.stringify(profile));
+  return cb(null, profile);
 }));

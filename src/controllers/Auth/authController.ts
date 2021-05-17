@@ -93,7 +93,7 @@ const logIn = async (req: Request, res: Response) => {
 
 
 const authMe = async (req: Request, res: Response) => {
-  User.findById(req.userId).exec()
+  User.findById(req.user).exec()
       .then(async (result)=>{
         if (result) {
           const user: IAuthMe = await getAuthData(result);

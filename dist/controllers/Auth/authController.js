@@ -101,7 +101,7 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
 });
 const authMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    User_1.default.findById(req.userId).exec()
+    User_1.default.findById(req.user).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
         if (result) {
             const user = yield authType_1.getAuthData(result);
