@@ -19,20 +19,20 @@ const authRedirect = async (req: Request, res: Response) => {
 const authFacebook = async (req: Request, res: Response) => {
   console.log('authFacebookGet', req.user);
 
-  // // @ts-ignore
-  // const email=req.user.email[0].value;
-  // // @ts-ignore
-  // const surname=req.user?.name?.familyName;
-  // // @ts-ignore
-  // const name=req.user?.name?.givenName;
-  // const signUpData:ISignUp={
-  //   surname: surname,
-  //   name: name,
-  //   email: email,
-  //   password: uuid(),
-  // };
+  // @ts-ignore
+  const email=req.user.email[0].value;
+  // @ts-ignore
+  const surname=req.user?.name?.familyName;
+  // @ts-ignore
+  const name=req.user?.name?.givenName;
+  const signUpData:ISignUp={
+    surname: surname,
+    name: name,
+    email: email,
+    password: uuid(),
+  };
 
-  res.status(200).json(req.user);
+  res.status(200).json(signUpData);
 };
 
 export default {authRedirect, authFacebook};
