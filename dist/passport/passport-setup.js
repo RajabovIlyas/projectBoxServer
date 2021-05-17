@@ -74,8 +74,34 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
     clientID: app_1.facebookClient.id,
     clientSecret: app_1.facebookClient.secret,
     callbackURL: app_1.projectUrl + '/api/auth/facebook/callback',
-    profileFields: ['id', 'displayName', 'photos', 'email'],
-}, (accessToken, refreshToken, profile, cb) => {
-    console.log('ilyas_facebook', JSON.stringify(profile));
-    return cb(null, profile);
+    profileFields: ['id', 'email', 'name'],
+}, (accessToken, refreshToken, profile, done) => {
+    console.log('ilyas_facebook', profile._json);
+    // @ts-ignore
+    const email = profile.emails[0].value;
+    const fullName = profile.displayName.split(' ');
+    const signUpData = {
+        surname: fullName[1],
+        name: fullName[0],
+        email: email,
+        password: uuid_1.v4(),
+    };
+    User_1.default.findOne({ email: signUpData.email }).exec()
+        .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+        if (result === null || result === void 0 ? void 0 : result.id) {
+            done(null, { token: yield authHelper_1.generateToken(result.id) });
+        }
+        else {
+            User_1.default.create(Object.assign(Object.assign({}, signUpData), { authorization: true }))
+                .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+                if (result === null || result === void 0 ? void 0 : result.id) {
+                    done(null, { token: yield authHelper_1.generateToken(result.id) });
+                }
+                else {
+                    throw 500;
+                }
+            })).catch((err) => done(err, profile));
+        }
+    }))
+        .catch((err) => done(err, profile));
 }));

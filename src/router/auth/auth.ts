@@ -5,11 +5,11 @@ import authMessenger from '../../controllers/Auth/authMessengerController';
 const router = Router();
 
 
-router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/failed'}), authMessenger.authGoogle);
+router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/failed'}), authMessenger.authRedirect);
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 
-router.get('/facebook', passport.authenticate('facebook'));
+router.get('/facebook', passport.authorize('facebook', {scope: ['email']}));
 router.get('/facebook/callback',
-    passport.authenticate('facebook', {scope: ['email']}), authMessenger.authFacebook);
+    passport.authenticate('facebook'), authMessenger.authRedirect);
 
 export default router;

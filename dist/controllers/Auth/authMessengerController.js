@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = require("../../core/app");
-const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const authRedirect = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     console.log('authGoogleGet', req.user);
     // @ts-ignore
@@ -23,21 +23,4 @@ const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
-const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('authFacebookGet', req.user);
-    res.status(200).json(req.user);
-    // // @ts-ignore
-    // const token=req?.user?.token;
-    // if (token) {
-    //   await res.redirect(`${sendMessageData.urlProjectBox}/google/${token}`);
-    //   //  res.status(200).json(req.user);
-    // } else {
-    //   res.status(500).json({message: 'Ошибка сервера'});
-    // }
-});
-// const deleteAllToken = async (req: Request, res: Response) => {
-//   Token.
-//     res.status(500).json({message: 'Ошибка сервера'});
-//
-// };
-exports.default = { authGoogle, authFacebook };
+exports.default = { authRedirect };

@@ -65,10 +65,34 @@ passport.use(new passportFacebook.Strategy({
   clientID: facebookClient.id,
   clientSecret: facebookClient.secret,
   callbackURL: projectUrl+'/api/auth/facebook/callback',
-  profileFields: ['id', 'displayName', 'photos', 'email'],
+  profileFields: ['id', 'email', 'name'],
 
 },
-(accessToken, refreshToken, profile, cb) => {
-  console.log('ilyas_facebook', JSON.stringify(profile));
-  return cb(null, profile);
+(accessToken, refreshToken, profile, done) => {
+  console.log('ilyas_facebook', profile._json);
+  // @ts-ignore
+  const email=profile.emails[0].value;
+  const fullName=profile.displayName.split(' ');
+  const signUpData:ISignUp={
+    surname: fullName[1],
+    name: fullName[0],
+    email: email,
+    password: uuid(),
+  };
+  User.findOne({email: signUpData.email}).exec()
+      .then(async (result)=>{
+        if (result?.id) {
+          done(null, {token: await generateToken(result.id)});
+        } else {
+          User.create({...signUpData, authorization: true})
+              .then(async (result)=>{
+                if (result?.id) {
+                  done(null, {token: await generateToken(result.id)});
+                } else {
+                  throw 500;
+                }
+              }).catch((err)=> done(err, profile));
+        }
+      })
+      .catch((err)=> done(err, profile));
 }));
