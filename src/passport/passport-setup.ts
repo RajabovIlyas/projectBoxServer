@@ -69,31 +69,34 @@ passport.use(new passportFacebook.Strategy({
 
 },
 (accessToken, refreshToken, profile, done) => {
-  console.log('ilyas_facebook', profile._json);
+  console.log('ilyas_facebook', JSON.stringify(profile));
   // @ts-ignore
-  const email=profile.emails[0].value;
-  const fullName=profile.displayName.split(' ');
-  const signUpData:ISignUp={
-    surname: fullName[1],
-    name: fullName[0],
-    email: email,
-    password: uuid(),
-  };
-  console.log('ilyas', signUpData);
-  User.findOne({email: signUpData.email}).exec()
-      .then(async (result)=>{
-        if (result?.id) {
-          done(null, {token: await generateToken(result.id)});
-        } else {
-          User.create({...signUpData, authorization: true})
-              .then(async (result)=>{
-                if (result?.id) {
-                  done(null, {token: await generateToken(result.id)});
-                } else {
-                  throw 500;
-                }
-              }).catch((err)=> done(err, profile));
-        }
-      })
-      .catch((err)=> done(err, profile));
+  // const prof=JSON.stringify(profile);
+  // const email=prof.email[0].value;
+  // const fullName=prof.displayName.split(' ');
+  // const signUpData:ISignUp={
+  //   surname: fullName[1],
+  //   name: fullName[0],
+  //   email: email,
+  //   password: uuid(),
+  // };
+  // console.log('ilyas', signUpData);
+  // User.findOne({email: signUpData.email}).exec()
+  //     .then(async (result)=>{
+  //       if (result?.id) {
+  //         done(null, {token: await generateToken(result.id)});
+  //       } else {
+  //         User.create({...signUpData, authorization: true})
+  //             .then(async (result)=>{
+  //               if (result?.id) {
+  //                 done(null, {token: await generateToken(result.id)});
+  //               } else {
+  //                 throw 500;
+  //               }
+  //             }).catch((err)=> done(err, profile));
+  //       }
+  //     })
+  //     .catch((err)=> done(err, profile));
+
+  done(null, profile);
 }));

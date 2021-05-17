@@ -76,33 +76,33 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
     callbackURL: app_1.projectUrl + '/api/auth/facebook/callback',
     profileFields: ['id', 'email', 'name'],
 }, (accessToken, refreshToken, profile, done) => {
-    console.log('ilyas_facebook', profile._json);
+    console.log('ilyas_facebook', JSON.stringify(profile));
     // @ts-ignore
-    const email = profile.emails[0].value;
-    const fullName = profile.displayName.split(' ');
-    const signUpData = {
-        surname: fullName[1],
-        name: fullName[0],
-        email: email,
-        password: uuid_1.v4(),
-    };
-    console.log('ilyas', signUpData);
-    User_1.default.findOne({ email: signUpData.email }).exec()
-        .then((result) => __awaiter(void 0, void 0, void 0, function* () {
-        if (result === null || result === void 0 ? void 0 : result.id) {
-            done(null, { token: yield authHelper_1.generateToken(result.id) });
-        }
-        else {
-            User_1.default.create(Object.assign(Object.assign({}, signUpData), { authorization: true }))
-                .then((result) => __awaiter(void 0, void 0, void 0, function* () {
-                if (result === null || result === void 0 ? void 0 : result.id) {
-                    done(null, { token: yield authHelper_1.generateToken(result.id) });
-                }
-                else {
-                    throw 500;
-                }
-            })).catch((err) => done(err, profile));
-        }
-    }))
-        .catch((err) => done(err, profile));
+    // const prof=JSON.stringify(profile);
+    // const email=prof.email[0].value;
+    // const fullName=prof.displayName.split(' ');
+    // const signUpData:ISignUp={
+    //   surname: fullName[1],
+    //   name: fullName[0],
+    //   email: email,
+    //   password: uuid(),
+    // };
+    // console.log('ilyas', signUpData);
+    // User.findOne({email: signUpData.email}).exec()
+    //     .then(async (result)=>{
+    //       if (result?.id) {
+    //         done(null, {token: await generateToken(result.id)});
+    //       } else {
+    //         User.create({...signUpData, authorization: true})
+    //             .then(async (result)=>{
+    //               if (result?.id) {
+    //                 done(null, {token: await generateToken(result.id)});
+    //               } else {
+    //                 throw 500;
+    //               }
+    //             }).catch((err)=> done(err, profile));
+    //       }
+    //     })
+    //     .catch((err)=> done(err, profile));
+    done(null, profile);
 }));
