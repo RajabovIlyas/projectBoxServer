@@ -69,17 +69,14 @@ passport.use(new passportFacebook.Strategy({
 
 },
 (accessToken, refreshToken, profile, done) => {
-  console.log('ilyas_facebook', JSON.stringify(profile));
   // @ts-ignore
-  // const prof=JSON.stringify(profile);
-  // const email=prof.email[0].value;
-  // const fullName=prof.displayName.split(' ');
-  // const signUpData:ISignUp={
-  //   surname: fullName[1],
-  //   name: fullName[0],
-  //   email: email,
-  //   password: uuid(),
-  // };
+  const email=profile.email[0].value;
+  const signUpData:ISignUp={
+    surname: profile.name?.familyName,
+    name: profile.name?.givenName,
+    email: email,
+    password: uuid(),
+  };
   // console.log('ilyas', signUpData);
   // User.findOne({email: signUpData.email}).exec()
   //     .then(async (result)=>{
@@ -98,5 +95,5 @@ passport.use(new passportFacebook.Strategy({
   //     })
   //     .catch((err)=> done(err, profile));
 
-  done(null, profile);
+  done(null, signUpData);
 }));
