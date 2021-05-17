@@ -18,7 +18,7 @@ const authHelper_1 = require("../../utils/authHelper");
 const User_1 = __importDefault(require("../../models/User"));
 const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('ilyas', signUpData);
-    User_1.default.findOne({ email: signUpData.email }).exec()
+    yield User_1.default.findOne({ email: signUpData.email }).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
         if (result === null || result === void 0 ? void 0 : result.id) {
             yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${authHelper_1.generateToken(result.id)}`);
@@ -32,10 +32,10 @@ const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, functio
                 else {
                     throw 500;
                 }
-            })).catch((err) => res.redirect(`${app_1.sendMessageData.urlProjectBox}`));
+            })).catch((err) => res.status(409).json({ message: err.message, signUpData }));
         }
     }))
-        .catch((err) => res.redirect(`${app_1.sendMessageData.urlProjectBox}`));
+        .catch((err) => res.status(408).json({ message: err.message, signUpData }));
 });
 const authRedirect = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;

@@ -8,7 +8,7 @@ import User from '../../models/User';
 
 const sendToken=async (signUpData: ISignUp, res: Response) => {
   console.log('ilyas', signUpData);
-  User.findOne({email: signUpData.email}).exec()
+  await User.findOne({email: signUpData.email}).exec()
       .then(async (result)=>{
         if (result?.id) {
           await res.redirect(`${sendMessageData.urlProjectBox}/google/${generateToken(result.id)}`);
@@ -20,10 +20,10 @@ const sendToken=async (signUpData: ISignUp, res: Response) => {
                 } else {
                   throw 500;
                 }
-              }).catch((err)=> res.redirect(`${sendMessageData.urlProjectBox}`));
+              }).catch((err)=> res.status(409).json({message: err.message, signUpData}));
         }
       })
-      .catch((err)=> res.redirect(`${sendMessageData.urlProjectBox}`));
+      .catch((err)=> res.status(408).json({message: err.message, signUpData}));
 };
 
 const authRedirect = async (req: Request, res: Response) => {
@@ -43,8 +43,6 @@ const authFacebook = async (req: Request, res: Response) => {
 
   // @ts-ignore
   const email=req.user.emails[0].value;
-
-
   // @ts-ignore
   const fullName:{givenName:string, familyName:string}=req.user.name;
 
