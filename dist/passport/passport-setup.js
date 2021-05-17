@@ -94,5 +94,5 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
     //       }
     //     })
     //     .catch((err)=> done(err, profile));
-    done(null, profile);
+    done(null, { token: 'ilyas' });
 }));

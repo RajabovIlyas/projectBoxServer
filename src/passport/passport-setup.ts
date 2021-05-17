@@ -88,5 +88,5 @@ passport.use(new passportFacebook.Strategy({
   //       }
   //     })
   //     .catch((err)=> done(err, profile));
-  done(null, profile);
+  done(null, {token: 'ilyas'});
 }));
