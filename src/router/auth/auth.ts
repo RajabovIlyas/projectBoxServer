@@ -9,6 +9,6 @@ router.get('/google/callback', passport.authenticate('google', {failureRedirect:
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 
 router.get('/facebook', passport.authorize('facebook', {scope: ['email']}));
-router.get('/facebook/callback', passport.authenticate('facebook'), authMessenger.authFacebook);
+router.get('/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/failed'}), authMessenger.authFacebook);
 
 export default router;
