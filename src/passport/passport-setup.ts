@@ -79,6 +79,7 @@ passport.use(new passportFacebook.Strategy({
     email: email,
     password: uuid(),
   };
+  console.log('ilyas', signUpData);
   User.findOne({email: signUpData.email}).exec()
       .then(async (result)=>{
         if (result?.id) {

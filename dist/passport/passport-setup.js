@@ -86,6 +86,7 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
         email: email,
         password: uuid_1.v4(),
     };
+    console.log('ilyas', signUpData);
     User_1.default.findOne({ email: signUpData.email }).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
         if (result === null || result === void 0 ? void 0 : result.id) {
