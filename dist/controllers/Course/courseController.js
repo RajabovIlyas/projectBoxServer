@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Course_1 = __importDefault(require("../../models/Course"));
 const sendMessage_1 = require("../../utils/sendMessage");
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    Course_1.default.create({ user: req.userId })
+    Course_1.default.create({ user: req.user })
         .then((result) => {
         sendMessage_1.sendMessageCourses(result)
             .then((result) => {
