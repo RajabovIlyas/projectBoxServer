@@ -17,13 +17,13 @@ const uuid_1 = require("uuid");
 const authHelper_1 = require("../../utils/authHelper");
 const User_1 = __importDefault(require("../../models/User"));
 const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('ilyas', signUpData);
     yield User_1.default.findOne({ email: signUpData.email }).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
         if (result === null || result === void 0 ? void 0 : result.id) {
             yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${yield authHelper_1.generateToken(result.id)}`);
         }
         else {
+            // @ts-ignore
             User_1.default.create(Object.assign(Object.assign({}, signUpData), { authorization: true }))
                 .then((result) => __awaiter(void 0, void 0, void 0, function* () {
                 if (result === null || result === void 0 ? void 0 : result.id) {
@@ -32,23 +32,24 @@ const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, functio
                 else {
                     throw 500;
                 }
-            })).catch((err) => res.status(409).json({ message: err.message, signUpData }));
+            })).catch((err) => res.redirect(`${app_1.sendMessageData.urlProjectBox}`));
         }
     }))
-        .catch((err) => res.status(408).json({ message: err.message, signUpData }));
+        .catch((err) => res.redirect(`${app_1.sendMessageData.urlProjectBox}`));
 });
-const authRedirect = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    console.log('authGoogleGet', req.user);
+const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e;
     // @ts-ignore
-    const token = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.token;
-    if (token) {
-        yield res.redirect(`${app_1.sendMessageData.urlProjectBox}/google/${token}`);
-        //  res.status(200).json(req.user);
-    }
-    else {
-        res.status(500).json({ message: 'Ошибка сервера' });
-    }
+    const email = (_a = req.user) === null || _a === void 0 ? void 0 : _a.emails[0].value;
+    // @ts-ignore
+    const fullName = { surname: (_c = (_b = req.user) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.familyName, name: (_e = (_d = req.user) === null || _d === void 0 ? void 0 : _d.name) === null || _e === void 0 ? void 0 : _e.givenName };
+    const signUpData = {
+        name: fullName.name,
+        surname: fullName.surname,
+        email: email,
+        password: uuid_1.v4(),
+    };
+    yield sendToken(signUpData, res);
 });
 const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('authFacebookGet', req.user);
@@ -64,4 +65,4 @@ const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     };
     yield sendToken(signUpData, res);
 });
-exports.default = { authRedirect, authFacebook };
+exports.default = { authGoogle, authFacebook };

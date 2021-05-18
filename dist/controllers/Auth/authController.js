@@ -16,8 +16,6 @@ const authType_1 = require("./authType");
 const bcryptjs_1 = require("bcryptjs");
 const authHelper_1 = require("../../utils/authHelper");
 const sendMessage_1 = require("../../utils/sendMessage");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const app_1 = require("../../core/app");
 const User_1 = __importDefault(require("../../models/User"));
 const Token_1 = __importDefault(require("../../models/Token"));
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -101,7 +99,7 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         .catch((err) => res.status(404).json({ message: 'Не верно введены данные!' }));
 });
 const authMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    User_1.default.findById(req.user).exec()
+    User_1.default.findById(req.userId).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
         if (result) {
             const user = yield authType_1.getAuthData(result);
@@ -116,14 +114,7 @@ const authMe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const authHeader = req.get('Authorization');
-    const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.substr(7);
-    if (!token) {
-        res.status(401).json({ message: 'Токен не представлен' });
-        return;
-    }
-    const payload = jsonwebtoken_1.default.verify(token, app_1.secret);
-    Token_1.default.findOneAndDelete({ tokenId: payload.id }).exec()
+    Token_1.default.findOneAndDelete({ tokenId: req.tokenUser }).exec()
         .then((token) => {
         res.status(200).json({ message: 'Токен успешно удален' });
     })

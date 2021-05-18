@@ -3,7 +3,6 @@ import {getAuthData, getDataSignUp, IAuthMe, ISignUp} from './authType';
 import bcrypt, {compareSync} from 'bcryptjs';
 import {generateToken} from '../../utils/authHelper';
 import {sendMessage} from '../../utils/sendMessage';
-import {payloadType} from '../../utils/TokenType';
 import jwt from 'jsonwebtoken';
 import {secret} from '../../core/app';
 import User from '../../models/User';
@@ -93,7 +92,7 @@ const logIn = async (req: Request, res: Response) => {
 
 
 const authMe = async (req: Request, res: Response) => {
-  User.findById(req.user).exec()
+  User.findById(req.userId).exec()
       .then(async (result)=>{
         if (result) {
           const user: IAuthMe = await getAuthData(result);
@@ -108,14 +107,7 @@ const authMe = async (req: Request, res: Response) => {
 };
 
 const logout = async (req: Request, res: Response) => {
-  const authHeader = req.get('Authorization');
-  const token = authHeader?.substr(7);
-  if (!token) {
-    res.status(401).json({message: 'Токен не представлен'});
-    return;
-  }
-  const payload: payloadType = <payloadType>jwt.verify(token, secret);
-  Token.findOneAndDelete({tokenId: payload.id}).exec()
+  Token.findOneAndDelete({tokenId: req.tokenUser}).exec()
       .then((token) => {
         res.status(200).json({message: 'Токен успешно удален'});
       })

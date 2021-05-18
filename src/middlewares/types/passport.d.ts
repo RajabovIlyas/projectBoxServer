@@ -1,3 +1,4 @@
+
 export type verifyType = {
     userId: string,
     type: string,
@@ -10,4 +11,9 @@ export type verifyRefreshType = {
     type: string,
     iat: number,
     exp: number
+}
+
+export type payloadType={
+    id:string;
+    type:string
 }

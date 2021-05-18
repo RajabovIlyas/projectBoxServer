@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Designer_1 = __importDefault(require("../../models/Designer"));
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    Designer_1.default.create({ user: req.user })
+    Designer_1.default.create({ user: req.userId })
         .then((result) => {
         res.status(200).json({ message: 'Проектировщик успешно создан!' });
     })

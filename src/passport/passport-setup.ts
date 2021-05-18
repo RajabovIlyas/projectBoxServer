@@ -33,30 +33,7 @@ passport.use(new passportGoogle.Strategy({
   callbackURL: projectUrl+'/api/auth/google/callback',
 },
 (token, tokenSecret, profile, done)=> {
-  // @ts-ignore
-  const email=profile.emails[0].value;
-  const signUpData:ISignUp={
-    surname: profile.name?.familyName,
-    name: profile.name?.givenName,
-    email: email,
-    password: uuid(),
-  };
-  User.findOne({email: signUpData.email}).exec()
-      .then(async (result)=>{
-        if (result?.id) {
-          done(null, {token: await generateToken(result.id)});
-        } else {
-          User.create({...signUpData, authorization: true})
-              .then(async (result)=>{
-                if (result?.id) {
-                  done(null, {token: await generateToken(result.id)});
-                } else {
-                  throw 500;
-                }
-              }).catch((err)=> done(err, profile));
-        }
-      })
-      .catch((err)=> done(err, profile));
+  done(null, profile);
 },
 ));
 
@@ -69,24 +46,5 @@ passport.use(new passportFacebook.Strategy({
 
 },
 (accessToken, refreshToken, profile, done) => {
-  // @ts-ignore
-
-  // console.log('ilyas', signUpData);
-  // User.findOne({email: signUpData.email}).exec()
-  //     .then(async (result)=>{
-  //       if (result?.id) {
-  //         done(null, {token: await generateToken(result.id)});
-  //       } else {
-  //         User.create({...signUpData, authorization: true})
-  //             .then(async (result)=>{
-  //               if (result?.id) {
-  //                 done(null, {token: await generateToken(result.id)});
-  //               } else {
-  //                 throw 500;
-  //               }
-  //             }).catch((err)=> done(err, profile));
-  //       }
-  //     })
-  //     .catch((err)=> done(err, profile));
   done(null, profile);
 }));

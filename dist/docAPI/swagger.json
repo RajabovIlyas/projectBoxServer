@@ -28,7 +28,7 @@
     },
     "servers": [
         {
-            "url": "https://thawing-beach-08639.herokuapp.com/"
+            "url": "https://projectbox-pro-server.herokuapp.com/"
         },
         {
             "url": "http://178.172.137.52:5000/"
@@ -152,6 +152,20 @@
                 }
             }
         },
+        "/api/auth/facebook": {
+            "get": {
+                "summary": "Авторизация и регистрация через Facebook",
+                "tags": [
+                    "Запросы авторизации API"
+                ],
+                "description": "При успешном входе должен вернуть объект token",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/auth-me": {
             "get": {
                 "security": [
@@ -239,6 +253,48 @@
                 "description": "В объекте body, должны быть все ниже перечисленные параметры",
                 "responses": {
                     "204": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/agent": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": [
+                            "JWT"
+                        ]
+                    }
+                ],
+                "summary": "Стать Агентом",
+                "tags": [
+                    "Работа с Агентом"
+                ],
+                "description": "Чтобы стать агентом нужно обязательно отправить токен",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/designer": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": [
+                            "JWT"
+                        ]
+                    }
+                ],
+                "summary": "Стать Проектировщиком",
+                "tags": [
+                    "Работа с проектировщиком"
+                ],
+                "description": "Чтобы стать проектировщиком нужно отправить токен",
+                "responses": {
+                    "200": {
                         "description": "OK"
                     }
                 }

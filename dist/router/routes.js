@@ -45,6 +45,7 @@ router.use('/course', course_1.default);
 router.use('/agent', agent_1.default);
 router.use('/designer', designer_1.default);
 router.delete('/token', (req, res) => {
+    // @ts-ignore
     Token_1.default.deleteMany().exec()
         .then((result) => res.status(200).json({}))
         .catch((err) => res.status(500).json({}));

@@ -3,7 +3,7 @@ import Designer from '../../models/Designer';
 
 
 const create=async (req: Request, res: Response) => {
-  Designer.create({user: req.user})
+  Designer.create({user: req.userId})
       .then((result)=>{
         res.status(200).json({message: 'Проектировщик успешно создан!'});
       })

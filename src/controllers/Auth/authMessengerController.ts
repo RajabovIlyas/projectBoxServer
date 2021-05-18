@@ -7,12 +7,12 @@ import {generateToken} from '../../utils/authHelper';
 import User from '../../models/User';
 
 const sendToken=async (signUpData: ISignUp, res: Response) => {
-  console.log('ilyas', signUpData);
   await User.findOne({email: signUpData.email}).exec()
       .then(async (result)=>{
         if (result?.id) {
           await res.redirect(`${sendMessageData.urlProjectBox}/google/${await generateToken(result.id)}`);
         } else {
+          // @ts-ignore
           User.create({...signUpData, authorization: true})
               .then(async (result)=>{
                 if (result?.id) {
@@ -20,22 +20,25 @@ const sendToken=async (signUpData: ISignUp, res: Response) => {
                 } else {
                   throw 500;
                 }
-              }).catch((err)=> res.status(409).json({message: err.message, signUpData}));
+              }).catch((err)=> res.redirect(`${sendMessageData.urlProjectBox}`));
         }
       })
-      .catch((err)=> res.status(408).json({message: err.message, signUpData}));
+      .catch((err)=> res.redirect(`${sendMessageData.urlProjectBox}`));
 };
 
-const authRedirect = async (req: Request, res: Response) => {
-  console.log('authGoogleGet', req.user);
+const authGoogle = async (req: Request, res: Response) => {
   // @ts-ignore
-  const token=req?.user?.token;
-  if (token) {
-    await res.redirect(`${sendMessageData.urlProjectBox}/google/${token}`);
-    //  res.status(200).json(req.user);
-  } else {
-    res.status(500).json({message: 'Ошибка сервера'});
-  }
+  const email=req.user?.emails[0].value;
+  // @ts-ignore
+  const fullName:{name:string, surname:string}={surname: req.user?.name?.familyName, name: req.user?.name?.givenName};
+  const signUpData:ISignUp={
+    name: fullName.name,
+    surname: fullName.surname,
+    email: email,
+    password: uuid(),
+  };
+
+  await sendToken(signUpData, res);
 };
 
 const authFacebook = async (req: Request, res: Response) => {
@@ -55,4 +58,4 @@ const authFacebook = async (req: Request, res: Response) => {
   await sendToken(signUpData, res);
 };
 
-export default {authRedirect, authFacebook};
+export default {authGoogle, authFacebook};

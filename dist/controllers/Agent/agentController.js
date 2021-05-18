@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Agent_1 = __importDefault(require("../../models/Agent"));
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    Agent_1.default.create({ user: req.user })
+    Agent_1.default.create({ user: req.userId })
         .then((result) => {
         res.status(200).json({ message: 'Агент успешно создан!' });
     })

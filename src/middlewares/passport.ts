@@ -1,8 +1,17 @@
 import {NextFunction, Request, Response} from 'express';
 import jwt from 'jsonwebtoken';
 import {secret} from '../core/app';
-import {payloadType} from '../utils/TokenType';
 import Token from '../models/Token';
+import {payloadType} from './types/passport';
+
+declare global {
+  namespace Express {
+    export interface Request {
+      userId?: string,
+      tokenUser?:string,
+    }
+  }
+}
 
 
 const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +34,8 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     Token.findOne({tokenId: payload.id}).exec()
         .then((result)=>{
           if (result) {
-            req.user =result.user;
+            req.userId = result.user;
+            req.tokenUser = result.tokenId;
             next();
           } else {
             throw 404;
