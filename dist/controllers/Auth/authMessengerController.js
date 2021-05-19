@@ -40,7 +40,6 @@ const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, functio
 const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     // @ts-ignore
-    // @ts-ignore
     const { email, picture, given_name, family_name } = (_a = req.user) === null || _a === void 0 ? void 0 : _a._json;
     const signUpData = {
         surname: family_name,
@@ -50,21 +49,21 @@ const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         avatar: picture,
     };
     res.status(200).json(signUpData);
-    // await sendToken(signUpData, res);
+    yield sendToken(signUpData, res);
 });
 const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     console.log('authFacebookGet', req.user);
     // @ts-ignore
-    const email = req.user.emails[0].value;
-    // @ts-ignore
-    const fullName = req.user.name;
+    const { email, last_name, first_name, picture } = req.user._json;
+    const avatar = (_b = picture === null || picture === void 0 ? void 0 : picture.data) === null || _b === void 0 ? void 0 : _b.url;
     const signUpData = {
-        surname: fullName.familyName,
-        name: fullName.givenName,
+        surname: last_name,
+        name: first_name,
         email: email,
         password: uuid_1.v4(),
+        avatar: avatar,
     };
-    res.status(200).json(req.user);
-    // await sendToken(signUpData, res);
+    yield sendToken(signUpData, res);
 });
 exports.default = { authGoogle, authFacebook };
