@@ -57,35 +57,9 @@ const authorization = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             throw 404;
         }
     }));
-    //
-    // User.findByIdAndUpdate(req.params.id, {authorization: true}).exec()
-    //     .then(async (result)=>{
-    //       const token = await generateToken(req.params.id);
-    //       res.status(200).json({token: token});
-    //     })
-    //     .catch((err) => res.status(404).json({message: 'Не верно введены данные!'}));
 });
 const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    //
-    // connect()
-    //     .then((conn) => {
-    //       conn.query(`SELECT * FROM user WHERE email='${email}' AND authorization=true`)
-    //           .then(async (result) => {
-    //             // @ts-ignore
-    //             if (result[0][0] && compareSync(password, result[0][0].password)) {
-    //               // @ts-ignore
-    //               const token = await generateToken(result[0][0].id);
-    //               res.status(200).json({token: token});
-    //             } else {
-    //               throw 404;
-    //             }
-    //           })
-    //           .catch((err) =>
-    //             res.status(404).json({message: 'Не верно введены данные!'}),
-    //           );
-    //     })
-    //     .catch((err) => res.status(500).json({message: 'Ошибка подключении к серверу'}));
     User_1.default.findOne({ email, authorization: true }).exec()
         .then((result) => __awaiter(void 0, void 0, void 0, function* () {
         if ((result === null || result === void 0 ? void 0 : result.id) && bcryptjs_1.compareSync(password, result.password)) {

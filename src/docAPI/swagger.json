@@ -258,6 +258,44 @@
         }
       }
     },
+    "/api/course": {
+      "post": {
+        "summary": "Записаться на курс",
+        "tags": [
+          "Запросы авторизации API"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "surname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "В объекте body, должны быть все ниже перечисленные параметры",
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/agent": {
       "post": {
         "security": [
@@ -293,6 +331,27 @@
           "Работа с проектировщиком"
         ],
         "description": "Чтобы стать проектировщиком нужно отправить токен",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/user/avatar": {
+      "put": {
+        "security": [
+          {
+            "bearerAuth": [
+              "JWT"
+            ]
+          }
+        ],
+        "summary": "Поменять фотографию",
+        "tags": [
+          "Работа с Пользователем"
+        ],
+        "description": "Чтобы поменять фото нужно отправить токен и сам токен(только не знаю как указать)",
         "responses": {
           "200": {
             "description": "OK"

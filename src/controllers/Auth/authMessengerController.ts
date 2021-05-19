@@ -38,7 +38,8 @@ const authGoogle = async (req: Request, res: Response) => {
     password: uuid(),
   };
 
-  await sendToken(signUpData, res);
+  res.status(200).json(req.user);
+  // await sendToken(signUpData, res);
 };
 
 const authFacebook = async (req: Request, res: Response) => {
@@ -55,7 +56,8 @@ const authFacebook = async (req: Request, res: Response) => {
     email: email,
     password: uuid(),
   };
-  await sendToken(signUpData, res);
+  res.status(200).json(req.user);
+  // await sendToken(signUpData, res);
 };
 
 export default {authGoogle, authFacebook};

@@ -1,6 +1,4 @@
 import {Request} from 'express';
-import bcrypt from 'bcryptjs';
-import {v4 as uuid} from 'uuid';
 import {IUser} from '../../models/User';
 
 export interface ISignUp {
@@ -10,11 +8,16 @@ export interface ISignUp {
     password: string | undefined;
 }
 
+export interface ISignInMessenger extends ISignUp{
+    avatar: string | undefined;
+}
+
 export interface IAuthMe {
     id:string;
     name: string;
     surname: string;
     email: string;
+    avatar: string;
 }
 
 export const getDataSignUp = async (req: Request): Promise<ISignUp|undefined> => {
@@ -32,5 +35,5 @@ export const getDataSignUp = async (req: Request): Promise<ISignUp|undefined> =>
 };
 
 export const getAuthData= async (user:IUser): Promise<IAuthMe>=>{
-  return {id: user._id, name: user.name, surname: user.surname, email: user.email};
+  return {id: user._id, name: user.name, surname: user.surname, email: user.email, avatar: user.avatar};
 };

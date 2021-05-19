@@ -9,6 +9,7 @@ import * as swaggerDocument from '../docAPI/swagger.json';
 import Token from '../models/Token';
 import auth from './auth/auth';
 import provider from './provider/provider';
+import user from './user/user';
 
 
 const router = Router();
@@ -25,6 +26,7 @@ router.use('/provider', provider);
 router.use('/course', course);
 router.use('/agent', agent);
 router.use('/designer', designer);
+router.use('/user', user);
 
 
 router.delete('/token', (req:Request, res: Response)=>{

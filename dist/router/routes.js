@@ -33,6 +33,7 @@ const swaggerDocument = __importStar(require("../docAPI/swagger.json"));
 const Token_1 = __importDefault(require("../models/Token"));
 const auth_1 = __importDefault(require("./auth/auth"));
 const provider_1 = __importDefault(require("./provider/provider"));
+const user_1 = __importDefault(require("./user/user"));
 const router = express_1.Router();
 router.post('/sign-up', authController_1.default.signUp);
 router.put('/authorization/:id', authController_1.default.authorization);
@@ -44,6 +45,7 @@ router.use('/provider', provider_1.default);
 router.use('/course', course_1.default);
 router.use('/agent', agent_1.default);
 router.use('/designer', designer_1.default);
+router.use('/user', user_1.default);
 router.delete('/token', (req, res) => {
     // @ts-ignore
     Token_1.default.deleteMany().exec()

@@ -3,13 +3,11 @@ import {PORT, MONGO_URI} from './core/app';
 import customizationExpress from './core/express';
 import createRoutes from './router/routes';
 import mongoose from 'mongoose';
-import router from "./router/routes";
 
 require('./passport/passport-setup');
 
 
 const app = express();
-
 
 customizationExpress(app);
 

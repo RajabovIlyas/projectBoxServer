@@ -26,6 +26,6 @@ const getDataSignUp = (req) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getDataSignUp = getDataSignUp;
 const getAuthData = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    return { id: user._id, name: user.name, surname: user.surname, email: user.email };
+    return { id: user._id, name: user.name, surname: user.surname, email: user.email, avatar: user.avatar };
 });
 exports.getAuthData = getAuthData;

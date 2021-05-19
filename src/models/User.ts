@@ -8,6 +8,7 @@ export interface IUser extends Document {
     email:string;
     password:string;
     authorization:boolean;
+    avatar:string;
 }
 
 export const UserSchema: Schema = new Schema({
@@ -16,6 +17,7 @@ export const UserSchema: Schema = new Schema({
   email: {type: String, required: true},
   password: {type: String, required: true},
   authorization: {type: Boolean, default: false},
+  avatar: {type: String, default: 'https://projectbox-pro-server.herokuapp.com/uploads/default.jpg'},
 });
 
 UserSchema.index({email: 1}, {unique: true});

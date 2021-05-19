@@ -4,7 +4,7 @@ import {sendMessageCourses} from '../../utils/sendMessage';
 
 
 const create=async (req: Request, res: Response) => {
-  Course.create({user: req.user})
+  Course.create({...req.body})
       .then((result)=>{
         sendMessageCourses(result)
             .then((result) => {

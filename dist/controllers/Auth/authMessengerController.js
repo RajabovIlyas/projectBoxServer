@@ -49,7 +49,8 @@ const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         email: email,
         password: uuid_1.v4(),
     };
-    yield sendToken(signUpData, res);
+    res.status(200).json(req.user);
+    // await sendToken(signUpData, res);
 });
 const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('authFacebookGet', req.user);
@@ -63,6 +64,7 @@ const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         email: email,
         password: uuid_1.v4(),
     };
-    yield sendToken(signUpData, res);
+    res.status(200).json(req.user);
+    // await sendToken(signUpData, res);
 });
 exports.default = { authGoogle, authFacebook };

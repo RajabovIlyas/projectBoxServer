@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import {Express} from 'express';
+import express, {Express} from 'express';
 
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
@@ -16,6 +16,9 @@ const corsOptions = {
 const customizationExpress=(app: Express)=>{
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(require('morgan')('dev'));
+
+  app.use('/uploads', express.static('uploads'));
+
   app.use(cors({
     origin: '*',
     methods: 'GET, POST, PATCH, DELETE, PUT',

@@ -12,6 +12,7 @@ exports.UserSchema = new mongoose_1.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     authorization: { type: Boolean, default: false },
+    avatar: { type: String, default: 'https://projectbox-pro-server.herokuapp.com/uploads/default.jpg' },
 });
 exports.UserSchema.index({ email: 1 }, { unique: true });
 exports.UserSchema.pre('save', function (next) {
