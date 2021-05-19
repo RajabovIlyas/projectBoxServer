@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 
 import {sendMessageData} from '../../core/app';
-import {ISignUp} from './authType';
+import {ISignInMessenger, ISignUp} from './authType';
 import {v4 as uuid} from 'uuid';
 import {generateToken} from '../../utils/authHelper';
 import User from '../../models/User';
@@ -28,17 +28,18 @@ const sendToken=async (signUpData: ISignUp, res: Response) => {
 
 const authGoogle = async (req: Request, res: Response) => {
   // @ts-ignore
-  const email=req.user?.emails[0].value;
   // @ts-ignore
-  const fullName:{name:string, surname:string}={surname: req.user?.name?.familyName, name: req.user?.name?.givenName};
-  const signUpData:ISignUp={
-    name: fullName.name,
-    surname: fullName.surname,
+  const {email, picture, given_name, family_name}=req.user?._json;
+
+  const signUpData:ISignInMessenger={
+    surname: family_name,
+    name: given_name,
     email: email,
     password: uuid(),
+    avatar: picture,
   };
 
-  res.status(200).json(req.user);
+  res.status(200).json(signUpData);
   // await sendToken(signUpData, res);
 };
 

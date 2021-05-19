@@ -38,18 +38,18 @@ const sendToken = (signUpData, res) => __awaiter(void 0, void 0, void 0, functio
         .catch((err) => res.redirect(`${app_1.sendMessageData.urlProjectBox}`));
 });
 const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
+    var _a;
     // @ts-ignore
-    const email = (_a = req.user) === null || _a === void 0 ? void 0 : _a.emails[0].value;
     // @ts-ignore
-    const fullName = { surname: (_c = (_b = req.user) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.familyName, name: (_e = (_d = req.user) === null || _d === void 0 ? void 0 : _d.name) === null || _e === void 0 ? void 0 : _e.givenName };
+    const { email, picture, given_name, family_name } = (_a = req.user) === null || _a === void 0 ? void 0 : _a._json;
     const signUpData = {
-        name: fullName.name,
-        surname: fullName.surname,
+        surname: family_name,
+        name: given_name,
         email: email,
         password: uuid_1.v4(),
+        avatar: picture,
     };
-    res.status(200).json(req.user);
+    res.status(200).json(signUpData);
     // await sendToken(signUpData, res);
 });
 const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

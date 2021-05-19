@@ -22,5 +22,6 @@ module.exports = {
     'no-unused-vars': 0,
     'no-invalid-this': 0,
     'new-cap': 0,
+    'camelcase': 0,
   },
 };
