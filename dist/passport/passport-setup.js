@@ -36,7 +36,7 @@ passport_1.default.use(new passport_facebook_1.default.Strategy({
     clientID: app_1.facebookClient.id,
     clientSecret: app_1.facebookClient.secret,
     callbackURL: app_1.projectUrl + '/api/auth/facebook/callback',
-    profileFields: ['id', 'email', 'name', 'photos'],
+    profileFields: ['id', 'email', 'name', 'picture.type(large)'],
 }, (accessToken, refreshToken, profile, done) => {
     done(null, profile);
 }));
