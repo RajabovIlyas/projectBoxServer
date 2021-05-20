@@ -48,7 +48,6 @@ const authGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         password: uuid_1.v4(),
         avatar: picture,
     };
-    res.status(200).json(signUpData);
     yield sendToken(signUpData, res);
 });
 const authFacebook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

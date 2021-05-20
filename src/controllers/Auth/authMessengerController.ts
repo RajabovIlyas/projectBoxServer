@@ -38,7 +38,7 @@ const authGoogle = async (req: Request, res: Response) => {
     avatar: picture,
   };
 
-  res.status(200).json(signUpData);
+
   await sendToken(signUpData, res);
 };
 
