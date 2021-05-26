@@ -39,7 +39,8 @@ const htmlMessageCourses = (course) => {
         `<img src="http://projectbox.pro/static/media/Projectbox_logo_with_slogan_inverse_orange_on_transparente_.41fac85d.png">` +
         `<p>Хочет записаться на курс ${course.name} ${course.surname}<br/>` +
         `Email: ${course.email}<br/>` +
-        `Номер телефона: ${course.phone}</p></div>`);
+        `Номер телефона: ${course.phone}<br/>` +
+        `Номер покупки: ${course.orderNumber}</p></div>`);
 };
 const sendMessage = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = yield nodemailer_1.default.createTransport({

@@ -7,5 +7,6 @@ exports.CourseSchema = new mongoose_1.Schema({
     surname: { type: String, required: true },
     email: { type: String, required: true },
     phone: { type: String, required: true },
+    orderNumber: { type: String, required: true },
 });
 exports.default = mongoose_1.model('Course', exports.CourseSchema);
